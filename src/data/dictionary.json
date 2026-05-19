@@ -1,0 +1,237 @@
+{
+  "_meta": "Korean -> English for enum values that appear in Encar API responses. Free-text dealer comments and inspector notes are NOT translated here — they need a translation service. Hand-curated; extend as you find new values.",
+
+  "fuel": {
+    "디젤": "Diesel",
+    "가솔린": "Gasoline",
+    "하이브리드": "Hybrid",
+    "전기": "Electric",
+    "LPG": "LPG",
+    "수소": "Hydrogen",
+    "플러그인하이브리드": "Plug-in Hybrid",
+    "가솔린+CNG": "Gasoline + CNG",
+    "디젤+전기": "Diesel + Electric"
+  },
+
+  "transmission": {
+    "오토": "Auto",
+    "수동": "Manual",
+    "세미오토": "Semi-Auto",
+    "CVT": "CVT",
+    "DCT": "DCT"
+  },
+
+  "color": {
+    "흰색": "White",
+    "검정": "Black",
+    "검정색": "Black",
+    "은색": "Silver",
+    "회색": "Gray",
+    "쥐색": "Gray (mouse)",
+    "진주": "Pearl",
+    "진주색": "Pearl",
+    "파랑": "Blue",
+    "파란색": "Blue",
+    "빨강": "Red",
+    "빨간색": "Red",
+    "초록": "Green",
+    "노랑": "Yellow",
+    "주황": "Orange",
+    "갈색": "Brown",
+    "베이지": "Beige",
+    "와인색": "Wine",
+    "골드": "Gold",
+    "보라색": "Purple",
+    "기타": "Other"
+  },
+
+  "status": {
+    "양호": "Good",
+    "정상": "Normal",
+    "불량": "Bad",
+    "보통": "Average",
+    "교환": "Replaced",
+    "판금": "Bodywork",
+    "용접": "Welded",
+    "부식": "Corrosion",
+    "흠집": "Scratch",
+    "손상": "Damaged",
+    "수리": "Repaired",
+    "없음": "None",
+    "있음": "Present",
+    "확인필요": "Needs check"
+  },
+
+  "recall": {
+    "이행": "Completed",
+    "미이행": "Not completed",
+    "해당없음": "Not applicable"
+  },
+
+  "warranty": {
+    "보험사보증": "Insurance-backed warranty",
+    "제조사보증": "Manufacturer warranty",
+    "판매자보증": "Seller warranty",
+    "보증없음": "No warranty",
+    "보증" : "Warranty"
+  },
+
+  "carShape": {
+    "SUV": "SUV",
+    "세단": "Sedan",
+    "쿠페": "Coupe",
+    "해치백": "Hatchback",
+    "왜건": "Wagon",
+    "컨버터블": "Convertible",
+    "리무진": "Limousine",
+    "픽업": "Pickup",
+    "밴": "Van",
+    "RV": "RV",
+    "SUV 5도어": "5-door SUV",
+    "SUV 4도어": "4-door SUV",
+    "세단 4도어": "4-door Sedan",
+    "5도어": "5-door",
+    "4도어": "4-door",
+    "3도어": "3-door"
+  },
+
+  "inspectionSection": {
+    "자기진단": "Self-diagnosis (OBD)",
+    "원동기": "Engine",
+    "변속기": "Transmission",
+    "동력전달": "Drivetrain",
+    "조향": "Steering",
+    "제동": "Brakes",
+    "전기": "Electrical",
+    "고전원": "High-voltage (EV)",
+    "고전원전기장치": "High-voltage EV system",
+    "연료": "Fuel system",
+    "주요내장": "Interior",
+    "외판": "Exterior panels",
+    "외판부": "Exterior panels",
+    "주요골격": "Main frame",
+    "수리내력": "Repair history",
+    "사고이력": "Accident history",
+    "주행거리": "Mileage",
+    "휠얼라이먼트": "Wheel alignment",
+    "타이어": "Tires"
+  },
+
+  "inspectionItem": {
+    "작동상태(공회전)": "Idle operation",
+    "오일누유": "Oil leak",
+    "오일유량": "Oil quantity",
+    "냉각수누수": "Coolant leak",
+    "냉각수유량": "Coolant level",
+    "고압펌프": "High-pressure pump",
+    "인젝터": "Injectors",
+    "터보차저": "Turbocharger",
+    "자동변속기": "Automatic transmission",
+    "수동변속기": "Manual transmission",
+    "클러치": "Clutch",
+    "동력전달": "Drivetrain",
+    "등속조인트": "CV joint",
+    "추진축": "Driveshaft",
+    "휠": "Wheel",
+    "타이어": "Tire",
+    "조향휠": "Steering wheel",
+    "동력조향장치": "Power steering",
+    "브레이크 마스터 실린더": "Brake master cylinder",
+    "배터리": "Battery",
+    "발전기": "Alternator",
+    "전동기": "Electric motor"
+  },
+
+  "panel": {
+    "HOOD": "Hood",
+    "FRONT_FENDER_LEFT": "Front fender (L)",
+    "FRONT_FENDER_RIGHT": "Front fender (R)",
+    "FRONT_DOOR_LEFT": "Front door (L)",
+    "FRONT_DOOR_RIGHT": "Front door (R)",
+    "BACK_DOOR_LEFT": "Rear door (L)",
+    "BACK_DOOR_RIGHT": "Rear door (R)",
+    "TRUNK_LID": "Trunk lid",
+    "ROOF": "Roof",
+    "QUARTER_PANEL_LEFT": "Quarter panel (L)",
+    "QUARTER_PANEL_RIGHT": "Quarter panel (R)",
+    "ROCKER_PANEL_LEFT": "Rocker panel (L)",
+    "ROCKER_PANEL_RIGHT": "Rocker panel (R)",
+    "FRONT_BUMPER": "Front bumper",
+    "BACK_BUMPER": "Rear bumper",
+    "CHECKER_COMMENT": "Inspector summary",
+    "OUTER_PANEL_COMMENT": "Outer panel summary"
+  },
+
+  "diagnosisResult": {
+    "NORMAL": "Normal",
+    "EXCHANGED": "Replaced",
+    "WELDED": "Welded",
+    "BODYWORK": "Bodywork",
+    "SCRATCH": "Scratch",
+    "DENT": "Dent",
+    "CORRODED": "Corroded"
+  },
+
+  "verdict": {
+    "무사고": "No accident",
+    "사고": "Has accident",
+    "단순교환": "Simple replacement only",
+    "단순수리": "Simple repair only",
+    "단순판금": "Simple bodywork only"
+  },
+
+  "uiLabel": {
+    "차량번호": "Plate number",
+    "주행거리": "Mileage",
+    "연료": "Fuel",
+    "변속기": "Transmission",
+    "배기량": "Displacement",
+    "색상": "Color",
+    "연식": "Model year",
+    "최초등록일": "First registration",
+    "성능점검기록부": "Performance inspection record",
+    "보험이력": "Insurance history",
+    "보험사보증": "Insurance-backed warranty",
+    "사고이력": "Accident history",
+    "옵션": "Options",
+    "외관": "Exterior",
+    "내부": "Interior",
+    "수리이력": "Repair history",
+    "판매가": "Sale price",
+    "딜러": "Dealer",
+    "사고": "Accident",
+    "내차피해": "Damage to this car",
+    "타차피해": "Damage to other cars",
+    "원": "KRW",
+    "만원": "10,000 KRW",
+    "회": "times",
+    "건": "events"
+  },
+
+  "modelSuffix": {
+    "1세대": "1st gen",
+    "2세대": "2nd gen",
+    "3세대": "3rd gen",
+    "4세대": "4th gen",
+    "5세대": "5th gen",
+    "신형": "facelift",
+    "구형": "older gen",
+    "올스페이스": "Allspace",
+    "올뉴": "All New",
+    "더 뉴": "The New",
+    "뉴": "New"
+  },
+
+  "accidentType": {
+    "1": "Own (this car damaged)",
+    "2": "Other (other car damaged)",
+    "3": "Combined"
+  },
+
+  "usageFlag": {
+    "1": "Private",
+    "2": "Business",
+    "3": "Rental",
+    "4": "Government"
+  }
+}

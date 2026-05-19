@@ -1,0 +1,79 @@
+{
+  "_meta": "Power (hp) lookup rules. The 'match' is a substring (case-insensitive) searched in the grade_name string. Engine codes (motor_type from inspection) are also supported. When multiple rules match, the most specific (longest match) wins. Power figures are factory-rated for the most common variant of that designation; some variants vary by ±10-30 hp by year/region — these are approximations to use alongside the trim badge, not warranty figures.",
+
+  "bmwGrade": {
+    "M40i": 387,
+    "45e": 394,
+    "40i": 340,
+    "40d": 340,
+    "35d": 286,
+    "30d": 286,
+    "30i": 252,
+    "30e": 252,
+    "25d": 231,
+    "25i": 218,
+    "23d": 211,
+    "23i": 218,
+    "20d": 190,
+    "20i": 184,
+    "18d": 150,
+    "18i": 140,
+    "16d": 116
+  },
+
+  "audiGrade": {
+    "55 TDI": 286,
+    "55 TFSI": 340,
+    "50 TDI": 286,
+    "50 TFSI": 286,
+    "45 TDI": 231,
+    "45 TFSI": 265,
+    "40 TDI": 204,
+    "40 TFSI": 204,
+    "35 TDI": 150,
+    "35 TFSI": 150,
+    "3.0 TDI": 245,
+    "2.0 TDI": 190,
+    "2.0 TFSI": 252
+  },
+
+  "vwGrade": {
+    "V6 3.0 TDI": 262,
+    "3.0 TDI": 245,
+    "2.0 TDI": 184,
+    "2.0 TSI": 220,
+    "1.4 TSI": 150
+  },
+
+  "engineCode": {
+    "B57D30A": 265,
+    "B57D30B": 286,
+    "B58B30B": 340,
+    "B58B30C": 340,
+    "B58B30P": 374,
+    "N57D30A": 258,
+    "N57D30B": 313,
+    "N20B20A": 245,
+    "N47D20C": 184,
+    "B47D20A": 190,
+    "B47D20B": 190,
+    "B46A20B": 184,
+    "B46B20B": 252,
+    "B48A20P": 252,
+    "DCB": 286,
+    "CYM": 286,
+    "DPX": 340,
+    "DPV": 340,
+    "DHX": 245,
+    "DCP": 245,
+    "DTP": 245,
+    "DET": 286,
+    "CRC": 245,
+    "DPY": 286,
+    "DTS": 231,
+    "DTE": 190,
+    "DEN": 286,
+    "DFG": 190,
+    "CVV": 245
+  }
+}

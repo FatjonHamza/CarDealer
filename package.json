@@ -1,0 +1,33 @@
+{
+  "name": "cardealer",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "recon": "tsx recon/encar-search.ts",
+    "fetch": "tsx src/cli/fetch-car.ts",
+    "catalog": "tsx src/cli/build-catalog.ts",
+    "ingest": "tsx src/cli/ingest.ts",
+    "backfill": "tsx src/cli/backfill.ts",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.28",
+    "@types/react-dom": "^18.3.7",
+    "playwright": "^1.49.0",
+    "tailwindcss": "^4.3.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  },
+  "dependencies": {
+    "@types/better-sqlite3": "^7.6.13",
+    "better-sqlite3": "^12.10.0",
+    "next": "^15.5.18",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

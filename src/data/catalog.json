@@ -1,0 +1,2527 @@
+{
+  "generatedAt": "2026-05-19T17:06:24.185Z",
+  "totalListings": 66282,
+  "brands": {
+    "BMW": {
+      "displayName": "BMW",
+      "engName": "BMW",
+      "count": 17642,
+      "models": {
+        "1시리즈": {
+          "displayName": "1시리즈",
+          "engName": "1-Series",
+          "count": 687
+        },
+        "2시리즈": {
+          "displayName": "2시리즈",
+          "engName": "2-Series",
+          "count": 435
+        },
+        "3시리즈": {
+          "displayName": "3시리즈",
+          "engName": "3-Series",
+          "count": 2129
+        },
+        "4시리즈": {
+          "displayName": "4시리즈",
+          "engName": "4-Series",
+          "count": 560
+        },
+        "5시리즈": {
+          "displayName": "5시리즈",
+          "engName": "5-Series",
+          "count": 4350
+        },
+        "6시리즈": {
+          "displayName": "6시리즈",
+          "engName": "6-Series",
+          "count": 84
+        },
+        "7시리즈": {
+          "displayName": "7시리즈",
+          "engName": "7-Series",
+          "count": 1253
+        },
+        "8시리즈": {
+          "displayName": "8시리즈",
+          "engName": "8-Series",
+          "count": 173
+        },
+        "그란투리스모 (GT)": {
+          "displayName": "그란투리스모 (GT)",
+          "engName": "Gran Turismo",
+          "count": 1218
+        },
+        "1M": {
+          "displayName": "1M",
+          "engName": "1M",
+          "count": 4
+        },
+        "M2": {
+          "displayName": "M2",
+          "engName": "M2",
+          "count": 76
+        },
+        "M3": {
+          "displayName": "M3",
+          "engName": "M3",
+          "count": 81
+        },
+        "M4": {
+          "displayName": "M4",
+          "engName": "M4",
+          "count": 80
+        },
+        "M5": {
+          "displayName": "M5",
+          "engName": "M5",
+          "count": 49
+        },
+        "M6": {
+          "displayName": "M6",
+          "engName": "M6",
+          "count": 8
+        },
+        "M8": {
+          "displayName": "M8",
+          "engName": "M8",
+          "count": 10
+        },
+        "X1": {
+          "displayName": "X1",
+          "engName": "X1",
+          "count": 534
+        },
+        "X2": {
+          "displayName": "X2",
+          "engName": "X2 (F39)",
+          "count": 108
+        },
+        "X3": {
+          "displayName": "X3",
+          "engName": "X3",
+          "count": 933
+        },
+        "X4": {
+          "displayName": "X4",
+          "engName": "X4",
+          "count": 815
+        },
+        "X5": {
+          "displayName": "X5",
+          "engName": "X5",
+          "count": 1285
+        },
+        "X6": {
+          "displayName": "X6",
+          "engName": "X6",
+          "count": 1029
+        },
+        "X7": {
+          "displayName": "X7",
+          "engName": "X7",
+          "count": 850
+        },
+        "X3M": {
+          "displayName": "X3M",
+          "engName": "X3M",
+          "count": 32
+        },
+        "X4M": {
+          "displayName": "X4M",
+          "engName": "X4M",
+          "count": 46
+        },
+        "X5M": {
+          "displayName": "X5M",
+          "engName": "X5M",
+          "count": 43
+        },
+        "X6M": {
+          "displayName": "X6M",
+          "engName": "X6M",
+          "count": 63
+        },
+        "XM": {
+          "displayName": "XM",
+          "engName": "XM",
+          "count": 33
+        },
+        "Z3": {
+          "displayName": "Z3",
+          "engName": "Z3",
+          "count": 8
+        },
+        "Z4": {
+          "displayName": "Z4",
+          "engName": "Z4",
+          "count": 175
+        },
+        "M 쿠페/로드스터": {
+          "displayName": "M 쿠페/로드스터",
+          "engName": "M Coupe/Roadster",
+          "count": 2
+        },
+        "i3": {
+          "displayName": "i3",
+          "engName": "i3",
+          "count": 39
+        },
+        "i4": {
+          "displayName": "i4",
+          "engName": "i4",
+          "count": 155
+        },
+        "i5": {
+          "displayName": "i5",
+          "engName": "i5",
+          "count": 84
+        },
+        "i7": {
+          "displayName": "i7",
+          "engName": "i7",
+          "count": 62
+        },
+        "i8": {
+          "displayName": "i8",
+          "engName": "i8",
+          "count": 22
+        },
+        "iX1": {
+          "displayName": "iX1",
+          "engName": "iX1",
+          "count": 11
+        },
+        "iX2": {
+          "displayName": "iX2",
+          "engName": "iX2",
+          "count": 5
+        },
+        "iX3": {
+          "displayName": "iX3",
+          "engName": "iX3",
+          "count": 59
+        },
+        "iX": {
+          "displayName": "iX",
+          "engName": "iX",
+          "count": 52
+        }
+      }
+    },
+    "GMC": {
+      "displayName": "GMC",
+      "engName": "GMC",
+      "count": 72,
+      "models": {
+        "밴츄라": {
+          "displayName": "밴츄라",
+          "engName": "Vandura",
+          "count": 1
+        },
+        "사바나": {
+          "displayName": "사바나",
+          "engName": "Savana",
+          "count": 9
+        },
+        "사파리": {
+          "displayName": "사파리",
+          "engName": "Safari",
+          "count": 1
+        },
+        "시에라": {
+          "displayName": "시에라",
+          "engName": "Sierra",
+          "count": 51
+        },
+        "유콘": {
+          "displayName": "유콘",
+          "engName": "Yukon",
+          "count": 3
+        },
+        "캐니언": {
+          "displayName": "캐니언",
+          "engName": "Canyon",
+          "count": 1
+        },
+        "허머EV": {
+          "displayName": "허머EV",
+          "engName": "Hummer EV",
+          "count": 6
+        }
+      }
+    },
+    "닛산": {
+      "displayName": "닛산",
+      "engName": "Nissan",
+      "count": 329,
+      "models": {
+        "300ZX": {
+          "displayName": "300ZX",
+          "engName": "300ZX",
+          "count": 1
+        },
+        "350Z": {
+          "displayName": "350Z",
+          "engName": "350Z",
+          "count": 1
+        },
+        "370Z": {
+          "displayName": "370Z",
+          "engName": "370Z",
+          "count": 5
+        },
+        "GT-R": {
+          "displayName": "GT-R",
+          "engName": "GT-R",
+          "count": 4
+        },
+        "리프": {
+          "displayName": "리프",
+          "engName": "Leaf",
+          "count": 12
+        },
+        "마치": {
+          "displayName": "마치",
+          "engName": "March",
+          "count": 2
+        },
+        "맥시마": {
+          "displayName": "맥시마",
+          "engName": "Maxima",
+          "count": 18
+        },
+        "무라노": {
+          "displayName": "무라노",
+          "engName": "Murano",
+          "count": 10
+        },
+        "센트라": {
+          "displayName": "센트라",
+          "engName": "Sentra",
+          "count": 2
+        },
+        "스카이라인": {
+          "displayName": "스카이라인",
+          "engName": "Skyline",
+          "count": 6
+        },
+        "알티마": {
+          "displayName": "알티마",
+          "engName": "Altima",
+          "count": 165
+        },
+        "엑스트레일": {
+          "displayName": "엑스트레일",
+          "engName": "X-Trail",
+          "count": 13
+        },
+        "엘그란드": {
+          "displayName": "엘그란드",
+          "engName": "Elgrand",
+          "count": 1
+        },
+        "쥬크": {
+          "displayName": "쥬크",
+          "engName": "Juke",
+          "count": 29
+        },
+        "캐시카이": {
+          "displayName": "캐시카이",
+          "engName": "Qashqai",
+          "count": 6
+        },
+        "큐브": {
+          "displayName": "큐브",
+          "engName": "Cube",
+          "count": 39
+        },
+        "티아나": {
+          "displayName": "티아나",
+          "engName": "Teana",
+          "count": 1
+        },
+        "패스파인더": {
+          "displayName": "패스파인더",
+          "engName": "Pathfinder",
+          "count": 11
+        },
+        "프론티어": {
+          "displayName": "프론티어",
+          "engName": "Frontier",
+          "count": 1
+        },
+        "휘가로": {
+          "displayName": "휘가로",
+          "engName": "Figaro",
+          "count": 1
+        },
+        "기타": {
+          "displayName": "기타",
+          "engName": "Others",
+          "count": 1
+        }
+      }
+    },
+    "닷지": {
+      "displayName": "닷지",
+      "engName": "Dodge",
+      "count": 100,
+      "models": {
+        "다코타": {
+          "displayName": "다코타",
+          "engName": "Dakoda",
+          "count": 8
+        },
+        "듀랑고": {
+          "displayName": "듀랑고",
+          "engName": "Durango",
+          "count": 1
+        },
+        "램밴": {
+          "displayName": "램밴",
+          "engName": "Ram Van",
+          "count": 2
+        },
+        "램픽업": {
+          "displayName": "램픽업",
+          "engName": "Ram Pick Up",
+          "count": 59
+        },
+        "매그넘": {
+          "displayName": "매그넘",
+          "engName": "Magnum",
+          "count": 1
+        },
+        "차저": {
+          "displayName": "차저",
+          "engName": "Charger",
+          "count": 2
+        },
+        "챌린저": {
+          "displayName": "챌린저",
+          "engName": "Challenger",
+          "count": 22
+        },
+        "그랜드 캐러밴": {
+          "displayName": "그랜드 캐러밴",
+          "engName": "Grand Caravan",
+          "count": 2
+        },
+        "캘리버": {
+          "displayName": "캘리버",
+          "engName": "Caliber",
+          "count": 3
+        }
+      }
+    },
+    "도요타": {
+      "displayName": "도요타",
+      "engName": "Toyota",
+      "count": 769,
+      "models": {
+        "86": {
+          "displayName": "86",
+          "engName": "86",
+          "count": 22
+        },
+        "4Runner": {
+          "displayName": "4Runner",
+          "engName": "4Runner",
+          "count": 1
+        },
+        "FJ 크루져": {
+          "displayName": "FJ 크루져",
+          "engName": "FJ Cruiser",
+          "count": 8
+        },
+        "RAV4": {
+          "displayName": "RAV4",
+          "engName": "RAV4",
+          "count": 101
+        },
+        "WiLL": {
+          "displayName": "WiLL",
+          "engName": "WiLL",
+          "count": 1
+        },
+        "bB": {
+          "displayName": "bB",
+          "engName": "bB",
+          "count": 4
+        },
+        "iQ": {
+          "displayName": "iQ",
+          "engName": "iQ",
+          "count": 1
+        },
+        "노아": {
+          "displayName": "노아",
+          "engName": "Noah",
+          "count": 1
+        },
+        "마크2": {
+          "displayName": "마크2",
+          "engName": "Mark2",
+          "count": 1
+        },
+        "마크X": {
+          "displayName": "마크X",
+          "engName": "MarkX",
+          "count": 1
+        },
+        "벤자": {
+          "displayName": "벤자",
+          "engName": "Venza",
+          "count": 1
+        },
+        "셀리카": {
+          "displayName": "셀리카",
+          "engName": "Celica",
+          "count": 1
+        },
+        "수프라": {
+          "displayName": "수프라",
+          "engName": "Supra",
+          "count": 10
+        },
+        "시에나": {
+          "displayName": "시에나",
+          "engName": "Sienna",
+          "count": 166
+        },
+        "아리스토": {
+          "displayName": "아리스토",
+          "engName": "Aristo",
+          "count": 1
+        },
+        "아발론": {
+          "displayName": "아발론",
+          "engName": "Avalon",
+          "count": 17
+        },
+        "아이고": {
+          "displayName": "아이고",
+          "engName": "AYGO",
+          "count": 1
+        },
+        "알파드": {
+          "displayName": "알파드",
+          "engName": "Alphard",
+          "count": 55
+        },
+        "야리스(비츠)": {
+          "displayName": "야리스(비츠)",
+          "engName": "Yaris(Vitz)",
+          "count": 1
+        },
+        "에스티마": {
+          "displayName": "에스티마",
+          "engName": "Estima",
+          "count": 1
+        },
+        "캠리": {
+          "displayName": "캠리",
+          "engName": "Camry",
+          "count": 161
+        },
+        "크라운": {
+          "displayName": "크라운",
+          "engName": "Crown",
+          "count": 55
+        },
+        "타코마": {
+          "displayName": "타코마",
+          "engName": "Tacoma",
+          "count": 9
+        },
+        "툰드라": {
+          "displayName": "툰드라",
+          "engName": "Tundra",
+          "count": 6
+        },
+        "프리우스": {
+          "displayName": "프리우스",
+          "engName": "Prius",
+          "count": 137
+        },
+        "하이랜더": {
+          "displayName": "하이랜더",
+          "engName": "Highlander",
+          "count": 6
+        }
+      }
+    },
+    "람보르기니": {
+      "displayName": "람보르기니",
+      "engName": "Lamborghini",
+      "count": 165,
+      "models": {
+        "가야르도": {
+          "displayName": "가야르도",
+          "engName": "Gallardo",
+          "count": 4
+        },
+        "레부엘토": {
+          "displayName": "레부엘토",
+          "engName": "Revuelto",
+          "count": 3
+        },
+        "무르시엘라고": {
+          "displayName": "무르시엘라고",
+          "engName": "Murcielago",
+          "count": 3
+        },
+        "아벤타도르": {
+          "displayName": "아벤타도르",
+          "engName": "Aventador",
+          "count": 13
+        },
+        "우라칸": {
+          "displayName": "우라칸",
+          "engName": "Huracan",
+          "count": 40
+        },
+        "우루스": {
+          "displayName": "우루스",
+          "engName": "Urus",
+          "count": 102
+        }
+      }
+    },
+    "랜드로버": {
+      "displayName": "랜드로버",
+      "engName": "Land Rover",
+      "count": 2487,
+      "models": {
+        "디스커버리 스포츠": {
+          "displayName": "디스커버리 스포츠",
+          "engName": "Discovery Sport",
+          "count": 396
+        },
+        "디스커버리": {
+          "displayName": "디스커버리",
+          "engName": "Discovery",
+          "count": 467
+        },
+        "디펜더": {
+          "displayName": "디펜더",
+          "engName": "Defender",
+          "count": 259
+        },
+        "레인지로버 벨라": {
+          "displayName": "레인지로버 벨라",
+          "engName": "Range Rover Velar",
+          "count": 199
+        },
+        "레인지로버 스포츠": {
+          "displayName": "레인지로버 스포츠",
+          "engName": "Range Rover Sport",
+          "count": 328
+        },
+        "레인지로버 이보크": {
+          "displayName": "레인지로버 이보크",
+          "engName": "Range Rover Evoque",
+          "count": 404
+        },
+        "레인지로버": {
+          "displayName": "레인지로버",
+          "engName": "Range Rover",
+          "count": 418
+        },
+        "프리랜더": {
+          "displayName": "프리랜더",
+          "engName": "Freelander",
+          "count": 16
+        }
+      }
+    },
+    "렉서스": {
+      "displayName": "렉서스",
+      "engName": "Lexus",
+      "count": 915,
+      "models": {
+        "CT200h": {
+          "displayName": "CT200h",
+          "engName": "CT200h",
+          "count": 30
+        },
+        "ES": {
+          "displayName": "ES",
+          "engName": "ES",
+          "count": 310
+        },
+        "GS": {
+          "displayName": "GS",
+          "engName": "GS",
+          "count": 22
+        },
+        "GX": {
+          "displayName": "GX",
+          "engName": "GX",
+          "count": 1
+        },
+        "IS": {
+          "displayName": "IS",
+          "engName": "IS",
+          "count": 49
+        },
+        "LM": {
+          "displayName": "LM",
+          "engName": "LM",
+          "count": 20
+        },
+        "LS": {
+          "displayName": "LS",
+          "engName": "LS",
+          "count": 89
+        },
+        "LX": {
+          "displayName": "LX",
+          "engName": "LX",
+          "count": 13
+        },
+        "NX": {
+          "displayName": "NX",
+          "engName": "NX",
+          "count": 224
+        },
+        "RC": {
+          "displayName": "RC",
+          "engName": "RC",
+          "count": 1
+        },
+        "RX": {
+          "displayName": "RX",
+          "engName": "RX",
+          "count": 67
+        },
+        "RZ": {
+          "displayName": "RZ",
+          "engName": "RZ",
+          "count": 3
+        },
+        "SC": {
+          "displayName": "SC",
+          "engName": "SC",
+          "count": 2
+        },
+        "UX": {
+          "displayName": "UX",
+          "engName": "UX",
+          "count": 84
+        }
+      }
+    },
+    "롤스로이스": {
+      "displayName": "롤스로이스",
+      "engName": "Rolls-Royce",
+      "count": 181,
+      "models": {
+        "고스트": {
+          "displayName": "고스트",
+          "engName": "Ghost",
+          "count": 82
+        },
+        "던": {
+          "displayName": "던",
+          "engName": "Dawn",
+          "count": 9
+        },
+        "레이스": {
+          "displayName": "레이스",
+          "engName": "Wraith",
+          "count": 25
+        },
+        "스펙터": {
+          "displayName": "스펙터",
+          "engName": "Spectre",
+          "count": 8
+        },
+        "컬리넌": {
+          "displayName": "컬리넌",
+          "engName": "Cullinan",
+          "count": 40
+        },
+        "팬텀": {
+          "displayName": "팬텀",
+          "engName": "Phantom",
+          "count": 17
+        }
+      }
+    },
+    "링컨": {
+      "displayName": "링컨",
+      "engName": "Lincoln",
+      "count": 708,
+      "models": {
+        "MKC": {
+          "displayName": "MKC",
+          "engName": "MKC",
+          "count": 39
+        },
+        "MKS": {
+          "displayName": "MKS",
+          "engName": "MKS",
+          "count": 23
+        },
+        "MKT": {
+          "displayName": "MKT",
+          "engName": "MKT",
+          "count": 4
+        },
+        "MKX": {
+          "displayName": "MKX",
+          "engName": "MKX",
+          "count": 48
+        },
+        "MKZ": {
+          "displayName": "MKZ",
+          "engName": "MKZ",
+          "count": 63
+        },
+        "네비게이터": {
+          "displayName": "네비게이터",
+          "engName": "Navigator",
+          "count": 46
+        },
+        "노틸러스": {
+          "displayName": "노틸러스",
+          "engName": "Nautilus",
+          "count": 75
+        },
+        "에비에이터": {
+          "displayName": "에비에이터",
+          "engName": "Aviator",
+          "count": 269
+        },
+        "컨티넨탈": {
+          "displayName": "컨티넨탈",
+          "engName": "Continental",
+          "count": 51
+        },
+        "코세어": {
+          "displayName": "코세어",
+          "engName": "Corsair",
+          "count": 87
+        },
+        "타운카": {
+          "displayName": "타운카",
+          "engName": "Town Car",
+          "count": 3
+        }
+      }
+    },
+    "마세라티": {
+      "displayName": "마세라티",
+      "engName": "Maserati",
+      "count": 590,
+      "models": {
+        "그란스포츠": {
+          "displayName": "그란스포츠",
+          "engName": "Gran Sport",
+          "count": 2
+        },
+        "그란카브리오": {
+          "displayName": "그란카브리오",
+          "engName": "Gran Cabrio",
+          "count": 9
+        },
+        "그란투리스모": {
+          "displayName": "그란투리스모",
+          "engName": "GranTurismo",
+          "count": 21
+        },
+        "기블리": {
+          "displayName": "기블리",
+          "engName": "Ghibli",
+          "count": 185
+        },
+        "그레칼레": {
+          "displayName": "그레칼레",
+          "engName": "Grecale",
+          "count": 40
+        },
+        "르반떼": {
+          "displayName": "르반떼",
+          "engName": "Levante",
+          "count": 214
+        },
+        "콰트로포르테": {
+          "displayName": "콰트로포르테",
+          "engName": "Quattroporte",
+          "count": 115
+        },
+        "MC20": {
+          "displayName": "MC20",
+          "engName": "MC20",
+          "count": 4
+        }
+      }
+    },
+    "맥라렌": {
+      "displayName": "맥라렌",
+      "engName": "Mclaren",
+      "count": 50,
+      "models": {
+        "570GT": {
+          "displayName": "570GT",
+          "engName": "570GT",
+          "count": 1
+        },
+        "570S": {
+          "displayName": "570S",
+          "engName": "570S",
+          "count": 13
+        },
+        "600LT": {
+          "displayName": "600LT",
+          "engName": "600LT",
+          "count": 2
+        },
+        "650S": {
+          "displayName": "650S",
+          "engName": "650S",
+          "count": 3
+        },
+        "675LT": {
+          "displayName": "675LT",
+          "engName": "675LT",
+          "count": 2
+        },
+        "720S": {
+          "displayName": "720S",
+          "engName": "720S",
+          "count": 5
+        },
+        "750S": {
+          "displayName": "750S",
+          "engName": "750S",
+          "count": 6
+        },
+        "GT": {
+          "displayName": "GT",
+          "engName": "GT",
+          "count": 13
+        },
+        "아투라": {
+          "displayName": "아투라",
+          "engName": "Artura",
+          "count": 5
+        }
+      }
+    },
+    "미니": {
+      "displayName": "미니",
+      "engName": "Mini",
+      "count": 3228,
+      "models": {
+        "쿠퍼": {
+          "displayName": "쿠퍼",
+          "engName": "Cooper",
+          "count": 1448
+        },
+        "쿠퍼 컨버터블": {
+          "displayName": "쿠퍼 컨버터블",
+          "engName": "Cooper Convertible",
+          "count": 252
+        },
+        "쿠페": {
+          "displayName": "쿠페",
+          "engName": "Coupe",
+          "count": 17
+        },
+        "로드스터": {
+          "displayName": "로드스터",
+          "engName": "Roadster",
+          "count": 17
+        },
+        "에이스맨": {
+          "displayName": "에이스맨",
+          "engName": "Aceman",
+          "count": 15
+        },
+        "컨트리맨": {
+          "displayName": "컨트리맨",
+          "engName": "Countryman",
+          "count": 853
+        },
+        "클럽맨": {
+          "displayName": "클럽맨",
+          "engName": "Clubman",
+          "count": 619
+        },
+        "페이스맨": {
+          "displayName": "페이스맨",
+          "engName": "Paceman",
+          "count": 6
+        },
+        "로버 미니": {
+          "displayName": "로버 미니",
+          "engName": "Rover Mini",
+          "count": 1
+        }
+      }
+    },
+    "벤츠": {
+      "displayName": "벤츠",
+      "engName": "Mercedes-Benz",
+      "count": 16886,
+      "models": {
+        "A-클래스": {
+          "displayName": "A-클래스",
+          "engName": "A-Class",
+          "count": 683
+        },
+        "B-클래스": {
+          "displayName": "B-클래스",
+          "engName": "B-Class",
+          "count": 67
+        },
+        "C-클래스": {
+          "displayName": "C-클래스",
+          "engName": "C-Class",
+          "count": 1325
+        },
+        "CL-클래스": {
+          "displayName": "CL-클래스",
+          "engName": "CL-Class",
+          "count": 11
+        },
+        "CLA-클래스": {
+          "displayName": "CLA-클래스",
+          "engName": "CLA-Class",
+          "count": 394
+        },
+        "CLE-클래스": {
+          "displayName": "CLE-클래스",
+          "engName": "CLE-Class",
+          "count": 146
+        },
+        "CLK-클래스": {
+          "displayName": "CLK-클래스",
+          "engName": "CLK-Class",
+          "count": 6
+        },
+        "CLS-클래스": {
+          "displayName": "CLS-클래스",
+          "engName": "CLS-Class",
+          "count": 962
+        },
+        "E-클래스": {
+          "displayName": "E-클래스",
+          "engName": "E-Class",
+          "count": 5010
+        },
+        "EQA": {
+          "displayName": "EQA",
+          "engName": "EQA",
+          "count": 86
+        },
+        "EQB": {
+          "displayName": "EQB",
+          "engName": "EQB",
+          "count": 93
+        },
+        "EQC": {
+          "displayName": "EQC",
+          "engName": "EQC",
+          "count": 34
+        },
+        "EQE": {
+          "displayName": "EQE",
+          "engName": "EQE",
+          "count": 105
+        },
+        "EQS": {
+          "displayName": "EQS",
+          "engName": "EQS",
+          "count": 106
+        },
+        "G-클래스": {
+          "displayName": "G-클래스",
+          "engName": "G-Class",
+          "count": 310
+        },
+        "GL-클래스": {
+          "displayName": "GL-클래스",
+          "engName": "GL-Class",
+          "count": 3
+        },
+        "GLA-클래스": {
+          "displayName": "GLA-클래스",
+          "engName": "GLA-Class",
+          "count": 439
+        },
+        "GLB-클래스": {
+          "displayName": "GLB-클래스",
+          "engName": "GLB-Class",
+          "count": 493
+        },
+        "GLC-클래스": {
+          "displayName": "GLC-클래스",
+          "engName": "GLC-Class",
+          "count": 1409
+        },
+        "GLE-클래스": {
+          "displayName": "GLE-클래스",
+          "engName": "GLE-Class",
+          "count": 1472
+        },
+        "GLK-클래스": {
+          "displayName": "GLK-클래스",
+          "engName": "GLK-Class",
+          "count": 52
+        },
+        "GLS-클래스": {
+          "displayName": "GLS-클래스",
+          "engName": "GLS-Class",
+          "count": 421
+        },
+        "M-클래스": {
+          "displayName": "M-클래스",
+          "engName": "M-class",
+          "count": 47
+        },
+        "R-클래스": {
+          "displayName": "R-클래스",
+          "engName": "R-Class",
+          "count": 2
+        },
+        "S-클래스": {
+          "displayName": "S-클래스",
+          "engName": "S-Class",
+          "count": 2697
+        },
+        "SL-클래스": {
+          "displayName": "SL-클래스",
+          "engName": "SL-Class",
+          "count": 60
+        },
+        "SLC-클래스": {
+          "displayName": "SLC-클래스",
+          "engName": "SLC-Class",
+          "count": 16
+        },
+        "SLK-클래스": {
+          "displayName": "SLK-클래스",
+          "engName": "SLK-Class",
+          "count": 26
+        },
+        "SLS AMG": {
+          "displayName": "SLS AMG",
+          "engName": "SLS AMG",
+          "count": 2
+        },
+        "AMG GT": {
+          "displayName": "AMG GT",
+          "engName": "AMG GT",
+          "count": 307
+        },
+        "SEL/SEC": {
+          "displayName": "SEL/SEC",
+          "engName": "SEL/SEC",
+          "count": 7
+        },
+        "V-클래스": {
+          "displayName": "V-클래스",
+          "engName": "V-Class",
+          "count": 22
+        },
+        "스프린터": {
+          "displayName": "스프린터",
+          "engName": "Sprinter",
+          "count": 72
+        },
+        "190-클래스": {
+          "displayName": "190-클래스",
+          "engName": "190-Class",
+          "count": 1
+        }
+      }
+    },
+    "벤틀리": {
+      "displayName": "벤틀리",
+      "engName": "Bentley",
+      "count": 293,
+      "models": {
+        "뮬산": {
+          "displayName": "뮬산",
+          "engName": "Mulsanne",
+          "count": 6
+        },
+        "벤테이가": {
+          "displayName": "벤테이가",
+          "engName": "Bentayga",
+          "count": 62
+        },
+        "브룩랜즈": {
+          "displayName": "브룩랜즈",
+          "engName": "Brooklands",
+          "count": 1
+        },
+        "아르나지": {
+          "displayName": "아르나지",
+          "engName": "Arnage",
+          "count": 1
+        },
+        "컨티넨탈": {
+          "displayName": "컨티넨탈",
+          "engName": "Continental",
+          "count": 123
+        },
+        "플라잉스퍼": {
+          "displayName": "플라잉스퍼",
+          "engName": "Flying Spur",
+          "count": 100
+        }
+      }
+    },
+    "볼보": {
+      "displayName": "볼보",
+      "engName": "Volvo",
+      "count": 2332,
+      "models": {
+        "960": {
+          "displayName": "960",
+          "engName": "960",
+          "count": 1
+        },
+        "C30": {
+          "displayName": "C30",
+          "engName": "C30",
+          "count": 11
+        },
+        "C40": {
+          "displayName": "C40",
+          "engName": "C40",
+          "count": 11
+        },
+        "C70": {
+          "displayName": "C70",
+          "engName": "C70",
+          "count": 1
+        },
+        "EX30": {
+          "displayName": "EX30",
+          "engName": "EX30",
+          "count": 4
+        },
+        "S40": {
+          "displayName": "S40",
+          "engName": "S40",
+          "count": 3
+        },
+        "S60": {
+          "displayName": "S60",
+          "engName": "S60",
+          "count": 241
+        },
+        "S70": {
+          "displayName": "S70",
+          "engName": "S70",
+          "count": 1
+        },
+        "S80": {
+          "displayName": "S80",
+          "engName": "S80",
+          "count": 30
+        },
+        "S90": {
+          "displayName": "S90",
+          "engName": "S90",
+          "count": 398
+        },
+        "V40": {
+          "displayName": "V40",
+          "engName": "V40",
+          "count": 50
+        },
+        "V50": {
+          "displayName": "V50",
+          "engName": "V50",
+          "count": 2
+        },
+        "V60": {
+          "displayName": "V60",
+          "engName": "V60",
+          "count": 205
+        },
+        "V90": {
+          "displayName": "V90",
+          "engName": "V90",
+          "count": 70
+        },
+        "XC40": {
+          "displayName": "XC40",
+          "engName": "XC40",
+          "count": 353
+        },
+        "XC60": {
+          "displayName": "XC60",
+          "engName": "XC60",
+          "count": 553
+        },
+        "XC70": {
+          "displayName": "XC70",
+          "engName": "XC70",
+          "count": 23
+        },
+        "XC90": {
+          "displayName": "XC90",
+          "engName": "XC90",
+          "count": 375
+        }
+      }
+    },
+    "쉐보레": {
+      "displayName": "쉐보레",
+      "engName": "Chevrolet",
+      "count": 115,
+      "models": {
+        "서버밴": {
+          "displayName": "서버밴",
+          "engName": "Surburban",
+          "count": 13
+        },
+        "실버라도": {
+          "displayName": "실버라도",
+          "engName": "Silverado",
+          "count": 4
+        },
+        "아발란치": {
+          "displayName": "아발란치",
+          "engName": "Avalanche",
+          "count": 2
+        },
+        "아스트로밴": {
+          "displayName": "아스트로밴",
+          "engName": "Astro Van",
+          "count": 3
+        },
+        "익스프레스밴": {
+          "displayName": "익스프레스밴",
+          "engName": "Express Van",
+          "count": 68
+        },
+        "체비밴": {
+          "displayName": "체비밴",
+          "engName": "Chevy Van",
+          "count": 2
+        },
+        "카마로": {
+          "displayName": "카마로",
+          "engName": "Camaro",
+          "count": 1
+        },
+        "콜로라도": {
+          "displayName": "콜로라도",
+          "engName": "Colorado",
+          "count": 2
+        },
+        "콜벳": {
+          "displayName": "콜벳",
+          "engName": "Corvette",
+          "count": 12
+        },
+        "타호": {
+          "displayName": "타호",
+          "engName": "Tahoe",
+          "count": 3
+        },
+        "트랙커": {
+          "displayName": "트랙커",
+          "engName": "Tracker",
+          "count": 2
+        },
+        "픽업트럭": {
+          "displayName": "픽업트럭",
+          "engName": "Pick Truck",
+          "count": 1
+        },
+        "기타": {
+          "displayName": "기타",
+          "engName": "Others",
+          "count": 2
+        }
+      }
+    },
+    "시트로엥/DS": {
+      "displayName": "시트로엥/DS",
+      "engName": "Citroen-DS",
+      "count": 134,
+      "models": {
+        "C3 에어크로스": {
+          "displayName": "C3 에어크로스",
+          "engName": "C3 Aircross",
+          "count": 14
+        },
+        "C4 스페이스투어러": {
+          "displayName": "C4 스페이스투어러",
+          "engName": "C4 SpaceTourer",
+          "count": 20
+        },
+        "C4 칵투스": {
+          "displayName": "C4 칵투스",
+          "engName": "C4 CACTUS",
+          "count": 20
+        },
+        "C4 피카소": {
+          "displayName": "C4 피카소",
+          "engName": "C4 Picasso",
+          "count": 30
+        },
+        "C5 에어크로스": {
+          "displayName": "C5 에어크로스",
+          "engName": "C5 Aircross",
+          "count": 6
+        },
+        "DS3": {
+          "displayName": "DS3",
+          "engName": "DS3",
+          "count": 34
+        },
+        "DS4": {
+          "displayName": "DS4",
+          "engName": "DS4",
+          "count": 3
+        },
+        "DS5": {
+          "displayName": "DS5",
+          "engName": "DS5",
+          "count": 2
+        },
+        "DS7": {
+          "displayName": "DS7",
+          "engName": "DS7",
+          "count": 5
+        }
+      }
+    },
+    "아우디": {
+      "displayName": "아우디",
+      "engName": "Audi",
+      "count": 5279,
+      "models": {
+        "A1": {
+          "displayName": "A1",
+          "engName": "A1",
+          "count": 7
+        },
+        "A3": {
+          "displayName": "A3",
+          "engName": "A3",
+          "count": 201
+        },
+        "A4": {
+          "displayName": "A4",
+          "engName": "A4",
+          "count": 417
+        },
+        "A5": {
+          "displayName": "A5",
+          "engName": "A5",
+          "count": 328
+        },
+        "A6": {
+          "displayName": "A6",
+          "engName": "A6",
+          "count": 1802
+        },
+        "A7": {
+          "displayName": "A7",
+          "engName": "A7",
+          "count": 441
+        },
+        "A8": {
+          "displayName": "A8",
+          "engName": "A8",
+          "count": 296
+        },
+        "Q2": {
+          "displayName": "Q2",
+          "engName": "Q2",
+          "count": 55
+        },
+        "Q3": {
+          "displayName": "Q3",
+          "engName": "Q3",
+          "count": 166
+        },
+        "Q5": {
+          "displayName": "Q5",
+          "engName": "Q5",
+          "count": 423
+        },
+        "Q7": {
+          "displayName": "Q7",
+          "engName": "Q7",
+          "count": 375
+        },
+        "Q8": {
+          "displayName": "Q8",
+          "engName": "Q8",
+          "count": 218
+        },
+        "R8": {
+          "displayName": "R8",
+          "engName": "R8",
+          "count": 46
+        },
+        "RS3": {
+          "displayName": "RS3",
+          "engName": "RS3",
+          "count": 17
+        },
+        "RS5": {
+          "displayName": "RS5",
+          "engName": "RS5",
+          "count": 13
+        },
+        "RS6": {
+          "displayName": "RS6",
+          "engName": "RS6",
+          "count": 5
+        },
+        "RS7": {
+          "displayName": "RS7",
+          "engName": "RS7",
+          "count": 7
+        },
+        "RSQ8": {
+          "displayName": "RSQ8",
+          "engName": "RSQ8",
+          "count": 15
+        },
+        "S3": {
+          "displayName": "S3",
+          "engName": "S3",
+          "count": 10
+        },
+        "S4": {
+          "displayName": "S4",
+          "engName": "S4",
+          "count": 16
+        },
+        "S5": {
+          "displayName": "S5",
+          "engName": "S5",
+          "count": 5
+        },
+        "S6": {
+          "displayName": "S6",
+          "engName": "S6",
+          "count": 16
+        },
+        "S7": {
+          "displayName": "S7",
+          "engName": "S7",
+          "count": 14
+        },
+        "S8": {
+          "displayName": "S8",
+          "engName": "S8",
+          "count": 20
+        },
+        "SQ5": {
+          "displayName": "SQ5",
+          "engName": "SQ5",
+          "count": 72
+        },
+        "SQ7": {
+          "displayName": "SQ7",
+          "engName": "SQ7",
+          "count": 4
+        },
+        "SQ8": {
+          "displayName": "SQ8",
+          "engName": "SQ8",
+          "count": 4
+        },
+        "TTS": {
+          "displayName": "TTS",
+          "engName": "TTS",
+          "count": 9
+        },
+        "TT": {
+          "displayName": "TT",
+          "engName": "TT",
+          "count": 26
+        },
+        "A6 e-트론": {
+          "displayName": "A6 e-트론",
+          "engName": "A6 e-Tron",
+          "count": 3
+        },
+        "e-트론": {
+          "displayName": "e-트론",
+          "engName": "e-tron",
+          "count": 115
+        },
+        "e-트론 GT": {
+          "displayName": "e-트론 GT",
+          "engName": "e-tron GT",
+          "count": 10
+        },
+        "RS e-트론 GT": {
+          "displayName": "RS e-트론 GT",
+          "engName": "RS e-tron GT",
+          "count": 10
+        },
+        "Q4 e-트론": {
+          "displayName": "Q4 e-트론",
+          "engName": "Q4 e-tron",
+          "count": 85
+        },
+        "Q6 e-트론": {
+          "displayName": "Q6 e-트론",
+          "engName": "Q6 e-tron",
+          "count": 20
+        },
+        "Q8 e-트론": {
+          "displayName": "Q8 e-트론",
+          "engName": "Q8 e-tron",
+          "count": 5
+        },
+        "SQ6 e-트론": {
+          "displayName": "SQ6 e-트론",
+          "engName": "SQ6 e-tron",
+          "count": 2
+        },
+        "올로드 콰트로": {
+          "displayName": "올로드 콰트로",
+          "engName": "Allroad Quattro",
+          "count": 1
+        }
+      }
+    },
+    "인피니티": {
+      "displayName": "인피니티",
+      "engName": "Infiniti",
+      "count": 399,
+      "models": {
+        "Q30": {
+          "displayName": "Q30",
+          "engName": "Q30",
+          "count": 72
+        },
+        "Q50": {
+          "displayName": "Q50",
+          "engName": "Q50",
+          "count": 114
+        },
+        "Q60": {
+          "displayName": "Q60",
+          "engName": "Q60",
+          "count": 9
+        },
+        "Q70": {
+          "displayName": "Q70",
+          "engName": "Q70",
+          "count": 23
+        },
+        "QX30": {
+          "displayName": "QX30",
+          "engName": "QX30",
+          "count": 8
+        },
+        "QX50": {
+          "displayName": "QX50",
+          "engName": "QX50",
+          "count": 35
+        },
+        "QX60": {
+          "displayName": "QX60",
+          "engName": "QX60",
+          "count": 42
+        },
+        "QX70": {
+          "displayName": "QX70",
+          "engName": "QX70",
+          "count": 8
+        },
+        "G": {
+          "displayName": "G",
+          "engName": "G",
+          "count": 34
+        },
+        "M": {
+          "displayName": "M",
+          "engName": "M",
+          "count": 30
+        },
+        "EX": {
+          "displayName": "EX",
+          "engName": "EX",
+          "count": 7
+        },
+        "FX": {
+          "displayName": "FX",
+          "engName": "FX",
+          "count": 12
+        },
+        "JX": {
+          "displayName": "JX",
+          "engName": "JX",
+          "count": 4
+        },
+        "QX": {
+          "displayName": "QX",
+          "engName": "QX",
+          "count": 1
+        }
+      }
+    },
+    "재규어": {
+      "displayName": "재규어",
+      "engName": "Jaguar",
+      "count": 503,
+      "models": {
+        "E-PACE": {
+          "displayName": "E-PACE",
+          "engName": "E-PACE",
+          "count": 35
+        },
+        "E-TYPE": {
+          "displayName": "E-TYPE",
+          "engName": "E-TYPE",
+          "count": 1
+        },
+        "F-PACE": {
+          "displayName": "F-PACE",
+          "engName": "F-PACE",
+          "count": 86
+        },
+        "F-TYPE": {
+          "displayName": "F-TYPE",
+          "engName": "F-TYPE",
+          "count": 40
+        },
+        "I-PACE": {
+          "displayName": "I-PACE",
+          "engName": "I-PACE",
+          "count": 10
+        },
+        "S-TYPE": {
+          "displayName": "S-TYPE",
+          "engName": "S-TYPE",
+          "count": 3
+        },
+        "X-TYPE": {
+          "displayName": "X-TYPE",
+          "engName": "X-TYPE",
+          "count": 3
+        },
+        "XE": {
+          "displayName": "XE",
+          "engName": "XE",
+          "count": 80
+        },
+        "XF": {
+          "displayName": "XF",
+          "engName": "XF",
+          "count": 141
+        },
+        "XJ-6": {
+          "displayName": "XJ-6",
+          "engName": "XJ-6",
+          "count": 7
+        },
+        "XJ-8": {
+          "displayName": "XJ-8",
+          "engName": "XJ-8",
+          "count": 10
+        },
+        "XJR": {
+          "displayName": "XJR",
+          "engName": "XJR",
+          "count": 2
+        },
+        "XJ": {
+          "displayName": "XJ",
+          "engName": "XJ",
+          "count": 74
+        },
+        "XK": {
+          "displayName": "XK",
+          "engName": "XK",
+          "count": 1
+        },
+        "XK8": {
+          "displayName": "XK8",
+          "engName": "XK8",
+          "count": 1
+        },
+        "XKR": {
+          "displayName": "XKR",
+          "engName": "XKR",
+          "count": 3
+        },
+        "다임러": {
+          "displayName": "다임러",
+          "engName": "Daimler",
+          "count": 5
+        },
+        "기타": {
+          "displayName": "기타",
+          "engName": "Others",
+          "count": 1
+        }
+      }
+    },
+    "지프": {
+      "displayName": "지프",
+      "engName": "Jeep",
+      "count": 2058,
+      "models": {
+        "글래디에이터": {
+          "displayName": "글래디에이터",
+          "engName": "Gladiator",
+          "count": 87
+        },
+        "랭글러": {
+          "displayName": "랭글러",
+          "engName": "Wrangler",
+          "count": 763
+        },
+        "레니게이드": {
+          "displayName": "레니게이드",
+          "engName": "Renegade",
+          "count": 387
+        },
+        "어벤저": {
+          "displayName": "어벤저",
+          "engName": "Avenger",
+          "count": 22
+        },
+        "체로키": {
+          "displayName": "체로키",
+          "engName": "Cherokee",
+          "count": 639
+        },
+        "커맨더": {
+          "displayName": "커맨더",
+          "engName": "Commander",
+          "count": 1
+        },
+        "컴패스": {
+          "displayName": "컴패스",
+          "engName": "Compass",
+          "count": 158
+        },
+        "패트리어트": {
+          "displayName": "패트리어트",
+          "engName": "Patriot",
+          "count": 1
+        }
+      }
+    },
+    "캐딜락": {
+      "displayName": "캐딜락",
+      "engName": "Cadillac",
+      "count": 546,
+      "models": {
+        "ATS-V": {
+          "displayName": "ATS-V",
+          "engName": "ATS-V",
+          "count": 2
+        },
+        "ATS": {
+          "displayName": "ATS",
+          "engName": "ATS",
+          "count": 24
+        },
+        "CT4": {
+          "displayName": "CT4",
+          "engName": "CT4",
+          "count": 16
+        },
+        "CT5": {
+          "displayName": "CT5",
+          "engName": "CT5",
+          "count": 15
+        },
+        "CT5-V": {
+          "displayName": "CT5-V",
+          "engName": "CT5-V",
+          "count": 1
+        },
+        "CT6": {
+          "displayName": "CT6",
+          "engName": "CT6",
+          "count": 106
+        },
+        "CTS": {
+          "displayName": "CTS",
+          "engName": "CTS",
+          "count": 38
+        },
+        "DTS": {
+          "displayName": "DTS",
+          "engName": "DTS",
+          "count": 3
+        },
+        "SRX": {
+          "displayName": "SRX",
+          "engName": "SRX",
+          "count": 3
+        },
+        "STS": {
+          "displayName": "STS",
+          "engName": "STS",
+          "count": 1
+        },
+        "XT4": {
+          "displayName": "XT4",
+          "engName": "XT4",
+          "count": 11
+        },
+        "XT5": {
+          "displayName": "XT5",
+          "engName": "XT5",
+          "count": 42
+        },
+        "XT6": {
+          "displayName": "XT6",
+          "engName": "XT6",
+          "count": 23
+        },
+        "드빌": {
+          "displayName": "드빌",
+          "engName": "DeVille",
+          "count": 1
+        },
+        "리릭": {
+          "displayName": "리릭",
+          "engName": "Lyriq",
+          "count": 2
+        },
+        "스빌": {
+          "displayName": "스빌",
+          "engName": "SeVille",
+          "count": 1
+        },
+        "에스컬레이드": {
+          "displayName": "에스컬레이드",
+          "engName": "Escalade",
+          "count": 257
+        }
+      }
+    },
+    "크라이슬러": {
+      "displayName": "크라이슬러",
+      "engName": "Chrysler",
+      "count": 76,
+      "models": {
+        "200": {
+          "displayName": "200",
+          "engName": "200",
+          "count": 22
+        },
+        "300C": {
+          "displayName": "300C",
+          "engName": "300C",
+          "count": 35
+        },
+        "PT 크루저": {
+          "displayName": "PT 크루저",
+          "engName": "PT Crusier",
+          "count": 1
+        },
+        "그랜드 보이저": {
+          "displayName": "그랜드 보이저",
+          "engName": "Grand Voyager",
+          "count": 7
+        },
+        "세브링": {
+          "displayName": "세브링",
+          "engName": "Sebring",
+          "count": 3
+        },
+        "캐러밴": {
+          "displayName": "캐러밴",
+          "engName": "Caravan",
+          "count": 1
+        },
+        "크로스파이어": {
+          "displayName": "크로스파이어",
+          "engName": "Crossfire",
+          "count": 4
+        },
+        "퍼시피카": {
+          "displayName": "퍼시피카",
+          "engName": "Pacifica",
+          "count": 2
+        },
+        "프라울러": {
+          "displayName": "프라울러",
+          "engName": "Prowler",
+          "count": 1
+        }
+      }
+    },
+    "테슬라": {
+      "displayName": "테슬라",
+      "engName": "Tesla",
+      "count": 928,
+      "models": {
+        "모델 3": {
+          "displayName": "모델 3",
+          "engName": "Model 3",
+          "count": 358
+        },
+        "모델 S": {
+          "displayName": "모델 S",
+          "engName": "Model S",
+          "count": 39
+        },
+        "모델 X": {
+          "displayName": "모델 X",
+          "engName": "Model X",
+          "count": 70
+        },
+        "모델 Y": {
+          "displayName": "모델 Y",
+          "engName": "Model Y",
+          "count": 450
+        },
+        "사이버트럭": {
+          "displayName": "사이버트럭",
+          "engName": "Cybertruck",
+          "count": 11
+        }
+      }
+    },
+    "페라리": {
+      "displayName": "페라리",
+      "engName": "Ferrari",
+      "count": 233,
+      "models": {
+        "296": {
+          "displayName": "296",
+          "engName": "296",
+          "count": 38
+        },
+        "308": {
+          "displayName": "308",
+          "engName": "308",
+          "count": 1
+        },
+        "456": {
+          "displayName": "456",
+          "engName": "456",
+          "count": 1
+        },
+        "458": {
+          "displayName": "458",
+          "engName": "458",
+          "count": 12
+        },
+        "488": {
+          "displayName": "488",
+          "engName": "488",
+          "count": 13
+        },
+        "599": {
+          "displayName": "599",
+          "engName": "599",
+          "count": 1
+        },
+        "812": {
+          "displayName": "812",
+          "engName": "812",
+          "count": 8
+        },
+        "F355": {
+          "displayName": "F355",
+          "engName": "F355",
+          "count": 1
+        },
+        "F430": {
+          "displayName": "F430",
+          "engName": "F430",
+          "count": 2
+        },
+        "F8": {
+          "displayName": "F8",
+          "engName": "F8",
+          "count": 23
+        },
+        "FF": {
+          "displayName": "FF",
+          "engName": "FF",
+          "count": 3
+        },
+        "GTC4 루쏘": {
+          "displayName": "GTC4 루쏘",
+          "engName": "GTC4 Lusso",
+          "count": 3
+        },
+        "SF90": {
+          "displayName": "SF90",
+          "engName": "SF90",
+          "count": 23
+        },
+        "로마": {
+          "displayName": "로마",
+          "engName": "Roma",
+          "count": 50
+        },
+        "캘리포니아": {
+          "displayName": "캘리포니아",
+          "engName": "California",
+          "count": 13
+        },
+        "포르토피노": {
+          "displayName": "포르토피노",
+          "engName": "Portofino",
+          "count": 29
+        },
+        "푸로산게": {
+          "displayName": "푸로산게",
+          "engName": "Purosangue",
+          "count": 12
+        }
+      }
+    },
+    "포드": {
+      "displayName": "포드",
+      "engName": "Ford",
+      "count": 1803,
+      "models": {
+        "E-Series": {
+          "displayName": "E-Series",
+          "engName": "E-Series",
+          "count": 7
+        },
+        "F150": {
+          "displayName": "F150",
+          "engName": "F150",
+          "count": 81
+        },
+        "F250": {
+          "displayName": "F250",
+          "engName": "F250",
+          "count": 4
+        },
+        "F350": {
+          "displayName": "F350",
+          "engName": "F350",
+          "count": 8
+        },
+        "레인저": {
+          "displayName": "레인저",
+          "engName": "Ranger",
+          "count": 88
+        },
+        "머스탱": {
+          "displayName": "머스탱",
+          "engName": "Mustang",
+          "count": 252
+        },
+        "몬데오": {
+          "displayName": "몬데오",
+          "engName": "Mondeo",
+          "count": 27
+        },
+        "브롱코": {
+          "displayName": "브롱코",
+          "engName": "Bronco",
+          "count": 100
+        },
+        "이스케이프": {
+          "displayName": "이스케이프",
+          "engName": "Escape",
+          "count": 11
+        },
+        "이코노라인": {
+          "displayName": "이코노라인",
+          "engName": "Econoline",
+          "count": 1
+        },
+        "익스플로러 스포츠트랙": {
+          "displayName": "익스플로러 스포츠트랙",
+          "engName": "Explorer Spot Trac",
+          "count": 1
+        },
+        "익스플로러": {
+          "displayName": "익스플로러",
+          "engName": "Explorer",
+          "count": 1108
+        },
+        "익스페디션": {
+          "displayName": "익스페디션",
+          "engName": "Expedition",
+          "count": 20
+        },
+        "쿠가": {
+          "displayName": "쿠가",
+          "engName": "Kuga",
+          "count": 20
+        },
+        "토러스": {
+          "displayName": "토러스",
+          "engName": "Taurus",
+          "count": 38
+        },
+        "트랜짓": {
+          "displayName": "트랜짓",
+          "engName": "Transit",
+          "count": 16
+        },
+        "포커스": {
+          "displayName": "포커스",
+          "engName": "Focus",
+          "count": 8
+        },
+        "퓨전": {
+          "displayName": "퓨전",
+          "engName": "Fusion",
+          "count": 13
+        }
+      }
+    },
+    "포르쉐": {
+      "displayName": "포르쉐",
+      "engName": "Porsche",
+      "count": 3084,
+      "models": {
+        "718": {
+          "displayName": "718",
+          "engName": "718",
+          "count": 287
+        },
+        "911": {
+          "displayName": "911",
+          "engName": "911",
+          "count": 378
+        },
+        "마칸": {
+          "displayName": "마칸",
+          "engName": "Macan",
+          "count": 339
+        },
+        "박스터": {
+          "displayName": "박스터",
+          "engName": "Boxster",
+          "count": 44
+        },
+        "카이맨": {
+          "displayName": "카이맨",
+          "engName": "Cayman",
+          "count": 8
+        },
+        "카이엔": {
+          "displayName": "카이엔",
+          "engName": "Cayenne",
+          "count": 1084
+        },
+        "타이칸": {
+          "displayName": "타이칸",
+          "engName": "Taycan",
+          "count": 273
+        },
+        "파나메라": {
+          "displayName": "파나메라",
+          "engName": "Panamera",
+          "count": 671
+        }
+      }
+    },
+    "폭스바겐": {
+      "displayName": "폭스바겐",
+      "engName": "Volkswagen",
+      "count": 2470,
+      "models": {
+        "CC": {
+          "displayName": "CC",
+          "engName": "CC",
+          "count": 102
+        },
+        "EOS": {
+          "displayName": "EOS",
+          "engName": "EOS",
+          "count": 1
+        },
+        "ID.4": {
+          "displayName": "ID.4",
+          "engName": "ID.4",
+          "count": 58
+        },
+        "ID.5": {
+          "displayName": "ID.5",
+          "engName": "ID.5",
+          "count": 2
+        },
+        "골프": {
+          "displayName": "골프",
+          "engName": "Golf",
+          "count": 406
+        },
+        "멀티밴": {
+          "displayName": "멀티밴",
+          "engName": "Multivan",
+          "count": 1
+        },
+        "보라": {
+          "displayName": "보라",
+          "engName": "Bora",
+          "count": 1
+        },
+        "비틀": {
+          "displayName": "비틀",
+          "engName": "Beatle",
+          "count": 69
+        },
+        "시로코": {
+          "displayName": "시로코",
+          "engName": "Scirocco",
+          "count": 33
+        },
+        "아테온": {
+          "displayName": "아테온",
+          "engName": "Arteon",
+          "count": 306
+        },
+        "아틀라스": {
+          "displayName": "아틀라스",
+          "engName": "Atlas",
+          "count": 16
+        },
+        "제타": {
+          "displayName": "제타",
+          "engName": "Jetta",
+          "count": 199
+        },
+        "투아렉": {
+          "displayName": "투아렉",
+          "engName": "Touareg",
+          "count": 158
+        },
+        "티구안": {
+          "displayName": "티구안",
+          "engName": "Tiguan",
+          "count": 812
+        },
+        "티록": {
+          "displayName": "티록",
+          "engName": "T-Roc",
+          "count": 49
+        },
+        "파사트": {
+          "displayName": "파사트",
+          "engName": "Passat",
+          "count": 208
+        },
+        "페이톤": {
+          "displayName": "페이톤",
+          "engName": "Phaeton",
+          "count": 21
+        },
+        "폴로": {
+          "displayName": "폴로",
+          "engName": "Polo",
+          "count": 26
+        },
+        "기타": {
+          "displayName": "기타",
+          "engName": "Others",
+          "count": 2
+        }
+      }
+    },
+    "폴스타": {
+      "displayName": "폴스타",
+      "engName": "Polestar",
+      "count": 95,
+      "models": {
+        "폴스타 2": {
+          "displayName": "폴스타 2",
+          "engName": "Polestar 2",
+          "count": 78
+        },
+        "폴스타 4": {
+          "displayName": "폴스타 4",
+          "engName": "Polestar 4",
+          "count": 17
+        }
+      }
+    },
+    "푸조": {
+      "displayName": "푸조",
+      "engName": "Peugeot",
+      "count": 513,
+      "models": {
+        "206": {
+          "displayName": "206",
+          "engName": "206",
+          "count": 4
+        },
+        "207": {
+          "displayName": "207",
+          "engName": "207",
+          "count": 4
+        },
+        "208": {
+          "displayName": "208",
+          "engName": "208",
+          "count": 30
+        },
+        "308": {
+          "displayName": "308",
+          "engName": "308",
+          "count": 49
+        },
+        "407": {
+          "displayName": "407",
+          "engName": "407",
+          "count": 1
+        },
+        "408": {
+          "displayName": "408",
+          "engName": "408",
+          "count": 18
+        },
+        "508": {
+          "displayName": "508",
+          "engName": "508",
+          "count": 54
+        },
+        "2008": {
+          "displayName": "2008",
+          "engName": "2008",
+          "count": 130
+        },
+        "3008": {
+          "displayName": "3008",
+          "engName": "3008",
+          "count": 119
+        },
+        "5008": {
+          "displayName": "5008",
+          "engName": "5008",
+          "count": 101
+        },
+        "RCZ": {
+          "displayName": "RCZ",
+          "engName": "RCZ",
+          "count": 2
+        },
+        "익스퍼트": {
+          "displayName": "익스퍼트",
+          "engName": "Expert",
+          "count": 1
+        }
+      }
+    },
+    "피아트": {
+      "displayName": "피아트",
+      "engName": "Fiat",
+      "count": 74,
+      "models": {
+        "124": {
+          "displayName": "124",
+          "engName": "124",
+          "count": 3
+        },
+        "500": {
+          "displayName": "500",
+          "engName": "500",
+          "count": 53
+        },
+        "500X": {
+          "displayName": "500X",
+          "engName": "500X",
+          "count": 13
+        },
+        "프리몬트": {
+          "displayName": "프리몬트",
+          "engName": "Feelmont",
+          "count": 5
+        }
+      }
+    },
+    "혼다": {
+      "displayName": "혼다",
+      "engName": "Honda",
+      "count": 836,
+      "models": {
+        "CR-V": {
+          "displayName": "CR-V",
+          "engName": "CR-V",
+          "count": 217
+        },
+        "CR-Z": {
+          "displayName": "CR-Z",
+          "engName": "CR-Z",
+          "count": 3
+        },
+        "HR-V": {
+          "displayName": "HR-V",
+          "engName": "HR-V",
+          "count": 4
+        },
+        "N-BOX": {
+          "displayName": "N-BOX",
+          "engName": "N-BOX",
+          "count": 8
+        },
+        "N-ONE": {
+          "displayName": "N-ONE",
+          "engName": "N-ONE",
+          "count": 3
+        },
+        "S660": {
+          "displayName": "S660",
+          "engName": "S660",
+          "count": 2
+        },
+        "댓츠": {
+          "displayName": "댓츠",
+          "engName": "That's",
+          "count": 1
+        },
+        "델솔": {
+          "displayName": "델솔",
+          "engName": "Del sol",
+          "count": 1
+        },
+        "레전드": {
+          "displayName": "레전드",
+          "engName": "Legend",
+          "count": 5
+        },
+        "비트": {
+          "displayName": "비트",
+          "engName": "Beat",
+          "count": 1
+        },
+        "시빅": {
+          "displayName": "시빅",
+          "engName": "Civic",
+          "count": 33
+        },
+        "어코드": {
+          "displayName": "어코드",
+          "engName": "Accord",
+          "count": 304
+        },
+        "오딧세이": {
+          "displayName": "오딧세이",
+          "engName": "Odyssey",
+          "count": 147
+        },
+        "크로스투어": {
+          "displayName": "크로스투어",
+          "engName": "Crosstour",
+          "count": 5
+        },
+        "파일럿": {
+          "displayName": "파일럿",
+          "engName": "Pilot",
+          "count": 102
+        }
+      }
+    }
+  }
+}

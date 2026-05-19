@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.next/
+.env
+.env.local
+*.log
+
+# Recon output — raw scraped responses, keep out of git
+recon/dumps/
+recon/screenshots/
+
+# SQLite DB + its WAL/SHM auxiliary files (real Encar listing data — keep local)
+data/*.db
+data/*.db-journal
+data/*.db-shm
+data/*.db-wal
+
+# OS
+.DS_Store
