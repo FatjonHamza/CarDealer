@@ -1,6 +1,7 @@
 /**
- * Infer 2WD vs 4WD from the grade name + model name. All cars in our scope
- * (BMW/Audi/VW SUVs sold in Korea) have a deterministic answer:
+ * Infer 2WD vs 4WD from the grade name + model name. Covers the cases we can
+ * answer deterministically; returns null for anything else (sedans, Korean
+ * domestic models, etc.) — that's safe, the UI just shows "—".
  *
  *   - BMW xDrive / Audi 콰트로 (quattro) / VW 4모션 (4Motion) → 4WD
  *   - BMW sDrive                                            → 2WD

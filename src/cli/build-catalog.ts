@@ -1,6 +1,7 @@
 /**
- * Build a catalog of every imported manufacturer on Encar + their model groups,
- * with live listing counts. Walks the iNav facet tree from a single API call.
+ * Build a catalog of every manufacturer on Encar (domestic + imported) and their
+ * model groups, with live listing counts. Walks the iNav facet tree from a
+ * single API call. Covers all body types — sedans, SUVs, hatchbacks, etc.
  *
  * Output: src/data/catalog.json
  *
@@ -9,7 +10,7 @@
 
 import { mkdir, writeFile } from "node:fs/promises";
 import { dirname } from "node:path";
-import { and, c, eq, render } from "../encar/query.js";
+import { and, eq, render } from "../encar/query.js";
 
 const API_BASE = "https://api.encar.com";
 const OUT = "src/data/catalog.json";
@@ -74,7 +75,7 @@ interface Catalog {
 
 /** Fetch model groups for a single manufacturer by querying with it as a filter. */
 async function fetchModelGroups(manufacturer: string): Promise<IFacet[]> {
-  const q = render(and(eq("Hidden", "N"), c(eq("CarType", "N"), eq("Manufacturer", manufacturer))));
+  const q = render(and(eq("Hidden", "N"), eq("Manufacturer", manufacturer)));
   const url = `${API_BASE}/search/car/list/general?count=true&q=${encodeURIComponent(q)}&inav=${encodeURIComponent("|Metadata|Sort")}`;
   const data = await getJson<IRoot>(url);
   const mg = findNode(data.iNav.Nodes, "ModelGroup");
@@ -82,12 +83,12 @@ async function fetchModelGroups(manufacturer: string): Promise<IFacet[]> {
 }
 
 async function main() {
-  console.log("Fetching imported-car facet tree...");
-  // All imported (CarType.N) + visible (Hidden.N).
-  const q = render(and(eq("Hidden", "N"), eq("CarType", "N")));
+  console.log("Fetching all-car facet tree (domestic + imported)...");
+  // Every visible (Hidden.N) listing — both domestic Korean and imported brands.
+  const q = render(eq("Hidden", "N"));
   const url = `${API_BASE}/search/car/list/general?count=true&q=${encodeURIComponent(q)}&inav=${encodeURIComponent("|Metadata|Sort")}`;
   const root = await getJson<IRoot & { Count: number }>(url);
-  console.log(`  Total imported listings: ${root.Count.toLocaleString()}`);
+  console.log(`  Total listings: ${root.Count.toLocaleString()}`);
 
   const mfgNode = findNode(root.iNav.Nodes, "Manufacturer");
   if (!mfgNode) throw new Error("No Manufacturer facet found");
@@ -130,7 +131,7 @@ async function main() {
 
   // Print summary, sorted by count
   const sorted = Object.entries(brands).sort((a, b) => b[1].count - a[1].count);
-  console.log(`\nImported brands (${sorted.length}):`);
+  console.log(`\nBrands (${sorted.length}):`);
   for (const [val, info] of sorted) {
     const eng = info.engName ? `  [${info.engName}]` : "";
     console.log(`  ${info.displayName.padEnd(18)} ${String(info.count).padStart(6)}${eng}  (key: ${val})`);

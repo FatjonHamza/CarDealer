@@ -38,9 +38,11 @@ export function render(e: Expr): string {
   }
 }
 
-/** Common building blocks for our German-SUV-on-Encar use case. */
+/** Common building blocks for Encar queries. */
 export const visible = eq("Hidden", "N");
+/** CarType.N = imported (수입). Optional — omit to include both. */
 export const imported = eq("CarType", "N");
+/** CarType.Y = domestic Korean (국산). Optional — omit to include both. */
 export const domestic = eq("CarType", "Y");
 
 export const manufacturer = (m: string) => eq("Manufacturer", m);

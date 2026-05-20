@@ -88,6 +88,10 @@ export interface SearchFilters {
   maxOwnerChanges?: number;
   excludeFlood?: boolean;
   hasInspection?: boolean;
+  /** Encar's Korean fuel string — e.g. "디젤", "가솔린", "하이브리드". */
+  fuel?: string;
+  /** "2WD" or "4WD" as stored by inferDrivetrain. */
+  drivetrain?: "2WD" | "4WD";
   vinUnique?: boolean; // group same-VIN duplicates and prefer the one with data
   sort?: "price" | "mileage" | "year" | "fresh";
   limit?: number;
@@ -126,6 +130,8 @@ export function searchCars(filters: SearchFilters = {}): CarRow[] {
     where.push("(flood_damage_count IS NULL OR flood_damage_count = 0)");
   }
   if (filters.hasInspection) where.push("has_inspection = 1");
+  if (filters.fuel) { where.push("fuel = @fuel"); params.fuel = filters.fuel; }
+  if (filters.drivetrain) { where.push("drivetrain = @drivetrain"); params.drivetrain = filters.drivetrain; }
 
   // Sort
   let orderBy = "ORDER BY first_seen_at DESC";
@@ -169,6 +175,17 @@ export function listBrands(): { manufacturer: string; manufacturer_eng: string |
     .all() as { manufacturer: string; manufacturer_eng: string | null; count: number }[];
 }
 
+/** Distinct fuel values present in the DB, for the search-form dropdown. */
+export function listFuels(): { fuel: string; count: number }[] {
+  return db()
+    .prepare(
+      `SELECT fuel, COUNT(*) as count FROM cars
+       WHERE fuel IS NOT NULL
+       GROUP BY fuel ORDER BY count DESC`,
+    )
+    .all() as { fuel: string; count: number }[];
+}
+
 /** Distinct models for a given brand. */
 export function listModels(brand: string): { model: string; count: number }[] {
   return db()
@@ -210,6 +227,27 @@ export function getCar(carId: number): ParsedCar | null {
     diagnosis: diagnosis_json ? (JSON.parse(diagnosis_json) as Diagnosis) : null,
     duplicates: dupes,
   };
+}
+
+/**
+ * Find ingested cars by VIN. Exact (17-char) match first; falls back to a
+ * substring LIKE so partial / lowercased input still works. Multiple rows
+ * can come back when the same physical car was re-listed (different car_id,
+ * same VIN).
+ */
+export function findCarsByVin(vin: string): CarRow[] {
+  const cleaned = vin.trim().toUpperCase();
+  if (!cleaned) return [];
+
+  const exact = db()
+    .prepare("SELECT * FROM cars WHERE vin = ? ORDER BY last_fetched_at DESC")
+    .all(cleaned) as CarRow[];
+  if (exact.length > 0) return exact;
+
+  if (cleaned.length < 4) return [];
+  return db()
+    .prepare("SELECT * FROM cars WHERE vin LIKE ? ORDER BY last_fetched_at DESC LIMIT 20")
+    .all(`%${cleaned}%`) as CarRow[];
 }
 
 // -------- shortlist --------

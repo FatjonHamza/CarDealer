@@ -9,6 +9,7 @@ import catalog from "../data/catalog.json" with { type: "json" };
 import { modelEnglish } from "../catalog-lookup.js";
 import { inferPower } from "../power-lookup.js";
 import { inferDrivetrain } from "../drivetrain.js";
+import { pickFeaturedPhoto } from "../photo.js";
 
 type Cat = typeof catalog;
 
@@ -32,7 +33,7 @@ function vehicleColumns(v: Vehicle | null) {
   const cat = v.category;
   const spec = v.spec;
   const ad = v.advertisement;
-  const firstPhoto = v.photos?.[0]?.path ?? null;
+  const featured = pickFeaturedPhoto(v.photos)?.path ?? null;
   return {
     vehicle_no: v.vehicleNo,
     vin: v.vin,
@@ -49,7 +50,7 @@ function vehicleColumns(v: Vehicle | null) {
     color: spec.colorName ?? null,
     body_type: (spec as { bodyName?: string }).bodyName ?? null,
     seat_count: (spec as { seatCount?: number }).seatCount ?? null,
-    featured_photo_path: firstPhoto,
+    featured_photo_path: featured,
     price_won: ad.price * 10_000,
     status: ad.status,
     one_line_text: ad.oneLineText ?? null,

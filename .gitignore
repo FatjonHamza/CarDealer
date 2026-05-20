@@ -3,6 +3,8 @@ dist/
 .next/
 .env
 .env.local
+.ingest
+tsconfig.tsbuildinfo
 *.log
 
 # Recon output — raw scraped responses, keep out of git

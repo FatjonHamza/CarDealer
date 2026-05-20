@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { searchCars, type CarRow } from "../../src/db/queries.js";
+import { searchCars, type CarRow, type SearchFilters } from "../../src/db/queries.js";
 import { tt } from "../../src/i18n.js";
 import { modelEnglish } from "../../src/catalog-lookup.js";
 import { photoUrl } from "../../src/photo.js";
@@ -65,7 +65,8 @@ function redFlags(c: CarRow): string[] {
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const sp = await searchParams;
-  const filters = {
+  const drivetrainParam = pickStr(sp.drivetrain);
+  const filters: SearchFilters = {
     brand: pickStr(sp.brand),
     model: pickStr(sp.model),
     maxPriceWon: pickNum(sp.maxPriceM) ? pickNum(sp.maxPriceM)! * 1_000_000 : undefined,
@@ -75,6 +76,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     maxAccidentCount: pickNum(sp.maxAcc),
     maxOwnerChanges: pickNum(sp.maxOwn),
     excludeFlood: pickStr(sp.noFlood) === "on",
+    fuel: pickStr(sp.fuel) || undefined,
+    drivetrain: drivetrainParam === "2WD" || drivetrainParam === "4WD" ? drivetrainParam : undefined,
     vinUnique: pickStr(sp.vinUnique) === "on",
     sort: (pickStr(sp.sort) as "price" | "mileage" | "year" | "fresh" | undefined) ?? "fresh",
     limit: 100,

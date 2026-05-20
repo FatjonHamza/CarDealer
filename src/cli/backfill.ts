@@ -10,6 +10,7 @@ import type { InspectionRecord, Vehicle } from "../encar/types.js";
 import { modelEnglish } from "../catalog-lookup.js";
 import { inferPower } from "../power-lookup.js";
 import { inferDrivetrain } from "../drivetrain.js";
+import { pickFeaturedPhoto } from "../photo.js";
 import catalog from "../data/catalog.json" with { type: "json" };
 
 interface Row {
@@ -69,7 +70,7 @@ async function main() {
         car_id: row.car_id,
         body_type: v.spec.bodyName ?? null,
         seat_count: v.spec.seatCount ?? null,
-        featured_photo_path: v.photos?.[0]?.path ?? null,
+        featured_photo_path: pickFeaturedPhoto(v.photos)?.path ?? null,
         model_eng: modelEnglish(v.category.manufacturerName, v.category.modelName),
         power_hp: power?.hp ?? null,
         power_kw: power?.kw ?? null,

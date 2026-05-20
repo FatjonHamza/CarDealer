@@ -1,9 +1,11 @@
 import Link from "next/link";
-import { dbStats, listBrands } from "../src/db/queries.js";
+import { dbStats, listBrands, listFuels } from "../src/db/queries.js";
+import { tt } from "../src/i18n.js";
 
 export default function HomePage() {
   const stats = dbStats();
   const brands = listBrands();
+  const fuels = listFuels();
 
   return (
     <div className="grid gap-8">
@@ -99,6 +101,25 @@ export default function HomePage() {
               placeholder="e.g. 2"
               className="px-2 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 bg-transparent"
             />
+          </label>
+          <label className="grid gap-1">
+            <span className="text-xs uppercase tracking-wide text-neutral-500">Fuel</span>
+            <select name="fuel" className="px-2 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 bg-transparent">
+              <option value="">Any</option>
+              {fuels.map((f) => (
+                <option key={f.fuel} value={f.fuel}>
+                  {tt(f.fuel, "fuel")} ({f.count})
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="grid gap-1">
+            <span className="text-xs uppercase tracking-wide text-neutral-500">Drivetrain</span>
+            <select name="drivetrain" className="px-2 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 bg-transparent">
+              <option value="">Any</option>
+              <option value="2WD">2WD</option>
+              <option value="4WD">4WD</option>
+            </select>
           </label>
           <label className="grid gap-1">
             <span className="text-xs uppercase tracking-wide text-neutral-500">Sort by</span>

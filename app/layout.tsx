@@ -20,6 +20,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </Link>
             <nav className="flex gap-4 text-sm text-neutral-600 dark:text-neutral-400">
               <Link href="/" className="hover:text-current">Search</Link>
+              <Link href="/manual-search" className="hover:text-current">Manual search</Link>
               <Link href="/shortlist" className="hover:text-current">
                 Shortlist{sCount > 0 && <span className="ml-1 text-xs bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 px-1.5 py-0.5 rounded">{sCount}</span>}
               </Link>
