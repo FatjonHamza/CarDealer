@@ -6,6 +6,269 @@ import { toggleShortlistAction, refreshCarAction } from "../../../src/actions.js
 import { modelEnglish } from "../../../src/catalog-lookup.js";
 import { photoUrl, uniquePaths } from "../../../src/photo.js";
 import { Icon } from "../../components/Icon.js";
+import type { InspectionRecord } from "../../../src/encar/types.js";
+
+// Korean panel-title -> English. Encar's panel dictionary is keyed by codes like
+// HOOD/FRONT_FENDER_LEFT, but real `outers` data comes back with Korean titles
+// (e.g. "후드", "프론트 휀더(좌)"), so we translate by title here.
+const PANEL_KO_EN: Record<string, string> = {
+  "후드": "Hood",
+  "프론트 휀더(좌)": "Front fender (L)",
+  "프론트 휀더(우)": "Front fender (R)",
+  "프론트 도어(좌)": "Front door (L)",
+  "프론트 도어(우)": "Front door (R)",
+  "리어 도어(좌)": "Rear door (L)",
+  "리어 도어(우)": "Rear door (R)",
+  "트렁크 리드": "Trunk lid",
+  "루프": "Roof",
+  "쿼터 패널(좌)": "Quarter panel (L)",
+  "쿼터 패널(우)": "Quarter panel (R)",
+  "사이드실 패널(좌)": "Rocker panel (L)",
+  "사이드실 패널(우)": "Rocker panel (R)",
+  "프론트 사이드 멤버(좌)": "Front side member (L)",
+  "프론트 사이드 멤버(우)": "Front side member (R)",
+  "인사이드 패널(좌)": "Inside panel (L)",
+  "인사이드 패널(우)": "Inside panel (R)",
+  "라디에이터 서포트(볼트체결부품)": "Radiator support (bolt-on)",
+  "리어 패널": "Rear panel",
+  "프론트 패널": "Front panel",
+  "프론트 범퍼": "Front bumper",
+  "리어 범퍼": "Rear bumper",
+};
+
+// statusTypes on outer panels use compact codes — translate code first, fall
+// back to the Korean title if unknown.
+const PANEL_STATUS_BY_CODE: Record<string, string> = {
+  X: "Replaced",
+  W: "Bodywork / welded",
+  WC: "Welded & cut",
+  C: "Corrosion",
+  A: "Scratch",
+  U: "Dent",
+};
+
+interface ChangedPanel {
+  panel: string;
+  panelKo: string;
+  statuses: { en: string; ko: string }[];
+}
+
+interface RawOuter {
+  type?: { code?: string; title?: string };
+  statusTypes?: { code?: string; title?: string }[];
+}
+
+function collectChangedPanels(inspection: InspectionRecord): ChangedPanel[] {
+  const outers = (inspection.outers ?? []) as unknown as RawOuter[];
+  return outers.map((o) => {
+    const panelKo = o.type?.title ?? o.type?.code ?? "?";
+    const panelEn = PANEL_KO_EN[panelKo] ?? panelKo;
+    const statuses = (o.statusTypes ?? []).map((s) => {
+      const ko = s.title ?? s.code ?? "?";
+      const en = (s.code && PANEL_STATUS_BY_CODE[s.code]) ?? ko;
+      return { en, ko };
+    });
+    return { panel: panelEn, panelKo, statuses };
+  });
+}
+
+function statusFill(status: string | undefined): string {
+  switch (status) {
+    case "Replaced": return "#dc2626";          // red-600
+    case "Welded & cut": return "#b91c1c";      // red-700
+    case "Bodywork / welded": return "#ea580c"; // orange-600
+    case "Dent": return "#f97316";              // orange-500
+    case "Corrosion": return "#ca8a04";         // yellow-600
+    case "Scratch": return "#facc15";           // yellow-400
+    case undefined: return "#9ca3af";           // neutral-400 — damaged, unknown type
+    default: return "#9ca3af";
+  }
+}
+
+const PANEL_BASE_FILL = "#e5e7eb"; // neutral-200 — untouched
+
+function CarPanelDiagram({ panels }: { panels: ChangedPanel[] }) {
+  const byPanel = new Map<string, ChangedPanel>();
+  for (const p of panels) byPanel.set(p.panelKo, p);
+
+  const fillFor = (panelKo: string): string => {
+    const p = byPanel.get(panelKo);
+    if (!p) return PANEL_BASE_FILL;
+    return statusFill(p.statuses[0]?.en);
+  };
+
+  const titleFor = (panelKo: string, fallback: string): string => {
+    const p = byPanel.get(panelKo);
+    if (!p) return `${fallback} — no damage recorded`;
+    const status = p.statuses.map((s) => s.en).join(", ") || "Damaged";
+    return `${p.panel} — ${status}`;
+  };
+
+  const Panel = ({
+    panelKo,
+    label,
+    x,
+    y,
+    width,
+    height,
+    rx = 4,
+    showLabel = true,
+  }: {
+    panelKo: string;
+    label: string;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    rx?: number;
+    showLabel?: boolean;
+  }) => {
+    const hit = byPanel.has(panelKo);
+    return (
+      <g>
+        <rect
+          x={x}
+          y={y}
+          width={width}
+          height={height}
+          rx={rx}
+          fill={fillFor(panelKo)}
+          stroke="#525252"
+          strokeWidth={1}
+          opacity={hit ? 1 : 0.55}
+        >
+          <title>{titleFor(panelKo, label)}</title>
+        </rect>
+        {showLabel && (
+          <text
+            x={x + width / 2}
+            y={y + height / 2 + 3}
+            textAnchor="middle"
+            fontSize={9}
+            fill={hit ? "#fff" : "#525252"}
+            pointerEvents="none"
+          >
+            {label}
+          </text>
+        )}
+      </g>
+    );
+  };
+
+  // Untouched-but-still-relevant inner panels we have data for, listed below the diagram.
+  const INNER_KO = [
+    "라디에이터 서포트(볼트체결부품)",
+    "프론트 사이드 멤버(좌)",
+    "프론트 사이드 멤버(우)",
+    "인사이드 패널(좌)",
+    "인사이드 패널(우)",
+    "리어 패널",
+    "프론트 패널",
+  ];
+  const innerHits = INNER_KO.map((k) => byPanel.get(k)).filter(
+    (p): p is ChangedPanel => !!p,
+  );
+
+  // Pick the legend entries actually present in this car.
+  const legendEntries = Array.from(
+    new Set(
+      panels.flatMap((p) => p.statuses.map((s) => s.en)).concat(
+        panels.some((p) => p.statuses.length === 0) ? ["Damaged"] : [],
+      ),
+    ),
+  );
+
+  return (
+    <div>
+      <div className="flex flex-col sm:flex-row gap-4 items-start">
+        <svg
+          viewBox="0 0 300 480"
+          className="w-full max-w-[260px] sm:max-w-[220px]"
+          role="img"
+          aria-label="Car panel damage diagram"
+        >
+          {/* Front bumper */}
+          <Panel panelKo="프론트 범퍼" label="F Bumper" x={20} y={4} width={260} height={22} rx={10} />
+
+          {/* Hood + front fenders */}
+          <Panel panelKo="프론트 휀더(좌)" label="F Fender L" x={10} y={30} width={60} height={80} />
+          <Panel panelKo="후드" label="Hood" x={75} y={30} width={150} height={80} />
+          <Panel panelKo="프론트 휀더(우)" label="F Fender R" x={230} y={30} width={60} height={80} />
+
+          {/* Doors (cabin area) */}
+          <Panel panelKo="프론트 도어(좌)" label="F Door L" x={10} y={115} width={60} height={80} />
+          <Panel panelKo="프론트 도어(우)" label="F Door R" x={230} y={115} width={60} height={80} />
+          <Panel panelKo="리어 도어(좌)" label="R Door L" x={10} y={200} width={60} height={80} />
+          <Panel panelKo="리어 도어(우)" label="R Door R" x={230} y={200} width={60} height={80} />
+
+          {/* Roof — visual only, not a tracked panel */}
+          <rect
+            x={75}
+            y={115}
+            width={150}
+            height={165}
+            rx={6}
+            fill="none"
+            stroke="#a3a3a3"
+            strokeDasharray="4 3"
+          />
+          <text x={150} y={200} textAnchor="middle" fontSize={10} fill="#737373">
+            Roof
+          </text>
+
+          {/* Quarter panels + trunk */}
+          <Panel panelKo="쿼터 패널(좌)" label="Quarter L" x={10} y={285} width={60} height={80} />
+          <Panel panelKo="트렁크 리드" label="Trunk lid" x={75} y={285} width={150} height={80} />
+          <Panel panelKo="쿼터 패널(우)" label="Quarter R" x={230} y={285} width={60} height={80} />
+
+          {/* Rocker (sill) panels — thin strips just inside the door columns */}
+          <Panel panelKo="사이드실 패널(좌)" label="" x={0} y={115} width={8} height={250} rx={2} showLabel={false} />
+          <Panel panelKo="사이드실 패널(우)" label="" x={292} y={115} width={8} height={250} rx={2} showLabel={false} />
+
+          {/* Rear bumper */}
+          <Panel panelKo="리어 범퍼" label="R Bumper" x={20} y={370} width={260} height={22} rx={10} />
+        </svg>
+
+        <div className="text-xs grid gap-1 min-w-[160px]">
+          <div className="font-semibold text-neutral-700 dark:text-neutral-300 mb-1">Legend</div>
+          {legendEntries.map((status) => (
+            <div key={status} className="flex items-center gap-2">
+              <span
+                className="inline-block w-3 h-3 rounded border border-neutral-400"
+                style={{ backgroundColor: statusFill(status === "Damaged" ? undefined : status) }}
+              />
+              <span className="text-neutral-700 dark:text-neutral-300">{status}</span>
+            </div>
+          ))}
+          <div className="flex items-center gap-2 mt-1">
+            <span
+              className="inline-block w-3 h-3 rounded border border-neutral-400"
+              style={{ backgroundColor: PANEL_BASE_FILL }}
+            />
+            <span className="text-neutral-500">Untouched</span>
+          </div>
+          {innerHits.length > 0 && (
+            <div className="mt-2 pt-2 border-t border-neutral-200 dark:border-neutral-800">
+              <div className="font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+                Internal panels affected
+              </div>
+              <ul className="text-neutral-700 dark:text-neutral-300 space-y-0.5">
+                {innerHits.map((p, i) => (
+                  <li key={i}>
+                    {p.panel}{" "}
+                    <span className="text-amber-700 dark:text-amber-400">
+                      ({p.statuses.map((s) => s.en).join(", ") || "Damaged"})
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 const KRW_PER_EUR = 1400;
 
@@ -283,6 +546,39 @@ export default async function CarDetailPage({ params }: DetailPageProps) {
           )}
         </section>
       )}
+
+      {car.inspection && (() => {
+        const panels = collectChangedPanels(car.inspection);
+        if (panels.length === 0) return null;
+        return (
+          <section>
+            <h2 className="text-lg font-semibold mb-1">Panels changed or repaired</h2>
+            <p className="text-xs text-neutral-500 mb-3">
+              From dealer inspection — reflects current panel state{car.accidentHistory ? ", not tied to a specific accident row above" : ""}.
+            </p>
+            <div className="mb-4">
+              <CarPanelDiagram panels={panels} />
+            </div>
+            <ul className="text-sm grid sm:grid-cols-2 gap-1">
+              {panels.map((p, i) => (
+                <li key={i} className="flex justify-between gap-2 border-b border-neutral-100 dark:border-neutral-900 py-1">
+                  <span className="text-neutral-700 dark:text-neutral-300">
+                    {p.panel}
+                    {p.panel !== p.panelKo && (
+                      <span className="text-neutral-400 ml-1">({p.panelKo})</span>
+                    )}
+                  </span>
+                  <span className="text-amber-700 dark:text-amber-400 font-medium shrink-0">
+                    {p.statuses.length > 0
+                      ? p.statuses.map((s) => s.en).join(", ")
+                      : "Damaged"}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })()}
 
       {car.inspection && (
         <section>
