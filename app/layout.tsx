@@ -25,9 +25,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 Shortlist{sCount > 0 && <span className="ml-1 text-xs bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 px-1.5 py-0.5 rounded">{sCount}</span>}
               </Link>
             </nav>
-            <div className="ml-auto text-xs text-neutral-500">
-              Local-only · ingest with <code className="bg-neutral-100 dark:bg-neutral-900 px-1.5 py-0.5 rounded">npm run ingest</code>
-            </div>
           </div>
         </header>
         <main className="max-w-7xl mx-auto px-4 py-6">{children}</main>

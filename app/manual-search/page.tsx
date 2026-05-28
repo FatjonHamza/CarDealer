@@ -2,6 +2,7 @@ import Link from "next/link";
 import { manualSearchAction, manualVinSearchAction } from "../../src/actions.js";
 import { findCarsByVin } from "../../src/db/queries.js";
 import { modelEnglish } from "../../src/catalog-lookup.js";
+import { getKrwPerEur, fmtEur } from "../../src/fx.js";
 
 interface ManualSearchPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -12,16 +13,12 @@ function pickStr(v: string | string[] | undefined): string | undefined {
   return v;
 }
 
-function fmtKRW(n: number | null | undefined): string {
-  if (n == null) return "—";
-  return `₩${n.toLocaleString()}`;
-}
-
 export default async function ManualSearchPage({ searchParams }: ManualSearchPageProps) {
   const sp = await searchParams;
   const error = pickStr(sp.error);
   const vinQuery = pickStr(sp.vin);
   const vinMatches = vinQuery ? findCarsByVin(vinQuery) : [];
+  const krwPerEur = vinMatches.length > 0 ? await getKrwPerEur() : 0;
 
   return (
     <div className="grid gap-6 max-w-3xl">
@@ -129,7 +126,7 @@ export default async function ManualSearchPage({ searchParams }: ManualSearchPag
                     </span>
                   </span>
                   <span className="text-sm font-mono whitespace-nowrap">
-                    {fmtKRW(c.price_won)} · {c.mileage_km != null ? `${c.mileage_km.toLocaleString()} km` : "—"} · #{c.car_id}
+                    {fmtEur(c.price_won, krwPerEur)} · {c.mileage_km != null ? `${c.mileage_km.toLocaleString()} km` : "—"} · #{c.car_id}
                   </span>
                 </Link>
               </li>

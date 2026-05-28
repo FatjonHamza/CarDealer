@@ -1,10 +1,17 @@
 import Link from "next/link";
-import { getShortlistedCars, type CarRow } from "../../src/db/queries.js";
+import {
+  checkCarStatus,
+  getShortlistedCars,
+  isStatusStale,
+  type CarRow,
+} from "../../src/db/queries.js";
 import { tt } from "../../src/i18n.js";
 import { toggleShortlistAction } from "../../src/actions.js";
 import { modelEnglish } from "../../src/catalog-lookup.js";
+import { getKrwPerEur, fmtEur } from "../../src/fx.js";
+import { photoUrlSized } from "../../src/photo.js";
 
-const KRW_PER_EUR = 1400;
+const SHORTLIST_STATUS_STALE_MS = 6 * 60 * 60 * 1000;
 
 type ShortlistedCar = CarRow & { note: string | null; added_at: string };
 
@@ -22,16 +29,6 @@ interface Row {
   highlight?: "good" | "bad";
 }
 
-function fmtKRW(n: number | null | undefined): string {
-  if (n == null) return "—";
-  return `₩${n.toLocaleString()}`;
-}
-
-function fmtKRWmillion(n: number | null | undefined): string {
-  if (n == null) return "—";
-  return `₩${(n / 1_000_000).toFixed(1)}M`;
-}
-
 function yearFromFirstReg(d: string | null): string {
   if (!d || d.length < 4) return "—";
   return d.slice(0, 4);
@@ -42,7 +39,8 @@ function yearMonthNum(d: string | null | undefined): number | null {
   return Number(d.slice(0, 6));
 }
 
-const ROWS: Row[] = [
+function buildRows(krwPerEur: number): Row[] {
+  return [
   // Spec
   {
     label: "Year (first reg)",
@@ -59,10 +57,7 @@ const ROWS: Row[] = [
   {
     label: "Price",
     value: (c) => c.price_won,
-    render: (c) =>
-      c.price_won != null
-        ? `${fmtKRWmillion(c.price_won)}  (€${Math.round(c.price_won / KRW_PER_EUR).toLocaleString()})`
-        : "—",
+    render: (c) => fmtEur(c.price_won, krwPerEur),
     direction: "min",
   },
   {
@@ -99,7 +94,7 @@ const ROWS: Row[] = [
   {
     label: "Repair cost (KIDI)",
     value: (c) => c.total_repair_cost_won,
-    render: (c) => (c.has_accident_history ? fmtKRW(c.total_repair_cost_won) : "no data"),
+    render: (c) => (c.has_accident_history ? fmtEur(c.total_repair_cost_won, krwPerEur) : "no data"),
     direction: "min",
   },
   {
@@ -178,7 +173,8 @@ const ROWS: Row[] = [
     value: () => null,
     render: (c) => c.first_seen_at.slice(0, 10),
   },
-];
+  ];
+}
 
 /** For a row's "best" direction, find which car ids are tied for best. */
 function bestCarIds(cars: ShortlistedCar[], row: Row): Set<number> {
@@ -193,8 +189,21 @@ function bestCarIds(cars: ShortlistedCar[], row: Row): Set<number> {
   return new Set(numeric.filter((x) => x.v === best).map((x) => x.id));
 }
 
-export default function ShortlistPage() {
-  const cars = getShortlistedCars();
+export default async function ShortlistPage() {
+  // First pass — get whatever is cached, then verify any rows whose status is
+  // stale before re-reading. checkCarStatus writes back to the DB and is
+  // concurrency-limited by ENRICH_LIMIT, so 50 stale items still play nicely
+  // with Encar. Most loads will skip the check entirely.
+  const initial = getShortlistedCars();
+  const stale = initial.filter((c) => isStatusStale(c.last_status_check_at, SHORTLIST_STATUS_STALE_MS));
+  const [, krwPerEur] = await Promise.all([
+    stale.length > 0
+      ? Promise.all(stale.map((c) => checkCarStatus(c.car_id).catch(() => null)))
+      : Promise.resolve(null),
+    getKrwPerEur(),
+  ]);
+  const cars = stale.length > 0 ? getShortlistedCars() : initial;
+  const rows = buildRows(krwPerEur);
 
   if (cars.length === 0) {
     return (
@@ -226,18 +235,40 @@ export default function ShortlistPage() {
               <th className="sticky left-0 z-10 bg-neutral-50 dark:bg-neutral-900 text-left p-3 text-xs uppercase tracking-wide text-neutral-500 border-b border-neutral-200 dark:border-neutral-800 w-48">
                 Field
               </th>
-              {cars.map((c) => (
+              {cars.map((c) => {
+                const photo = photoUrlSized(c.featured_photo_path, "medium");
+                return (
                 <th
                   key={c.car_id}
                   className="text-left p-3 border-b border-neutral-200 dark:border-neutral-800 align-top min-w-[14rem]"
                 >
-                  <div className="space-y-1">
+                  <div className="space-y-2">
+                    <Link href={`/car/${c.car_id}`} className="block rounded-lg overflow-hidden bg-neutral-100 dark:bg-neutral-900 aspect-[16/9]">
+                      {photo ? (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={photo}
+                          alt=""
+                          loading="lazy"
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <span className="w-full h-full flex items-center justify-center text-xs text-neutral-400">
+                          no photo
+                        </span>
+                      )}
+                    </Link>
                     <Link href={`/car/${c.car_id}`} className="font-semibold hover:underline block leading-tight">
                       {c.manufacturer_eng ?? c.manufacturer} {modelEnglish(c.manufacturer, c.model)}
                     </Link>
                     <div className="text-xs text-neutral-500 font-normal">
                       {c.grade_english || c.grade_name || ""}
                     </div>
+                    {c.listing_state === "sold" && (
+                      <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300">
+                        No longer on Encar
+                      </span>
+                    )}
                     <form action={toggleShortlistAction} className="pt-1">
                       <input type="hidden" name="carId" value={c.car_id} />
                       <input type="hidden" name="action" value="remove" />
@@ -250,11 +281,12 @@ export default function ShortlistPage() {
                     </form>
                   </div>
                 </th>
-              ))}
+                );
+              })}
             </tr>
           </thead>
           <tbody>
-            {ROWS.map((row) => {
+            {rows.map((row: Row) => {
               const best = bestCarIds(cars, row);
               const rowLabelClass =
                 row.highlight === "good"

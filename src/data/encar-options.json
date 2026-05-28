@@ -1,0 +1,315 @@
+{
+  "_meta": "Encar standard-option master from /v1/readside/vehicles/car/options/standard. Code is NOT unique across categories — match by (code, category). vehicle.options.standard contains plain codes; we render every entry sharing the code. English labels are hand-translated from the live Encar dictionary.",
+  "options": [
+    {
+      "code": "010",
+      "en": "Sunroof",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "029",
+      "en": "HID headlamps",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "075",
+      "en": "LED headlamps",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "059",
+      "en": "Power tailgate",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "080",
+      "en": "Soft-close doors",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "024",
+      "en": "Power folding mirrors",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "017",
+      "en": "Alloy wheels",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "062",
+      "en": "Roof rack",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "082",
+      "en": "Heated steering wheel",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "083",
+      "en": "Power-adjust steering column",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "084",
+      "en": "Paddle shifters",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "031",
+      "en": "Steering-wheel controls",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "030",
+      "en": "Auto-dimming rear-view mirror",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "074",
+      "en": "Hi-Pass (Korean toll system)",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "006",
+      "en": "Power door locks",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "008",
+      "en": "Power steering",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "007",
+      "en": "Power windows",
+      "category": "Exterior / Interior"
+    },
+    {
+      "code": "026",
+      "en": "Driver airbag",
+      "category": "Safety"
+    },
+    {
+      "code": "027",
+      "en": "Passenger airbag",
+      "category": "Safety"
+    },
+    {
+      "code": "020",
+      "en": "Side airbag",
+      "category": "Safety"
+    },
+    {
+      "code": "056",
+      "en": "Curtain airbag",
+      "category": "Safety"
+    },
+    {
+      "code": "001",
+      "en": "Anti-lock brakes (ABS)",
+      "category": "Safety"
+    },
+    {
+      "code": "019",
+      "en": "Traction control (TCS)",
+      "category": "Safety"
+    },
+    {
+      "code": "055",
+      "en": "Stability control (ESC)",
+      "category": "Safety"
+    },
+    {
+      "code": "033",
+      "en": "TPMS",
+      "category": "Safety"
+    },
+    {
+      "code": "088",
+      "en": "Lane departure warning (LDWS)",
+      "category": "Safety"
+    },
+    {
+      "code": "002",
+      "en": "Electronic suspension (ECS)",
+      "category": "Safety"
+    },
+    {
+      "code": "085",
+      "en": "Front parking sensor",
+      "category": "Safety"
+    },
+    {
+      "code": "032",
+      "en": "Rear parking sensor",
+      "category": "Safety"
+    },
+    {
+      "code": "086",
+      "en": "Blind-spot warning",
+      "category": "Safety"
+    },
+    {
+      "code": "058",
+      "en": "Rear-view camera",
+      "category": "Safety"
+    },
+    {
+      "code": "087",
+      "en": "360° around-view monitor",
+      "category": "Safety"
+    },
+    {
+      "code": "068",
+      "en": "Cruise control",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "079",
+      "en": "Adaptive cruise control",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "095",
+      "en": "Head-up display (HUD)",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "094",
+      "en": "Electronic parking brake (EPB)",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "023",
+      "en": "Auto climate control",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "057",
+      "en": "Smart key / push start",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "015",
+      "en": "Keyless entry",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "081",
+      "en": "Rain sensor",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "097",
+      "en": "Auto headlights",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "092",
+      "en": "Rear-seat curtain",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "093",
+      "en": "Rear-window curtain",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "005",
+      "en": "Navigation",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "004",
+      "en": "Front AV monitor",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "054",
+      "en": "Rear AV monitor",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "096",
+      "en": "Bluetooth",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "003",
+      "en": "CD player",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "072",
+      "en": "USB port",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "071",
+      "en": "AUX input",
+      "category": "Convenience / Multimedia"
+    },
+    {
+      "code": "014",
+      "en": "Leather seats",
+      "category": "Seats"
+    },
+    {
+      "code": "021",
+      "en": "Power driver seat",
+      "category": "Seats"
+    },
+    {
+      "code": "035",
+      "en": "Power passenger seat",
+      "category": "Seats"
+    },
+    {
+      "code": "089",
+      "en": "Power rear seats",
+      "category": "Seats"
+    },
+    {
+      "code": "022",
+      "en": "Heated front seats",
+      "category": "Seats"
+    },
+    {
+      "code": "063",
+      "en": "Heated rear seats",
+      "category": "Seats"
+    },
+    {
+      "code": "051",
+      "en": "Memory driver seat",
+      "category": "Seats"
+    },
+    {
+      "code": "078",
+      "en": "Memory passenger seat",
+      "category": "Seats"
+    },
+    {
+      "code": "034",
+      "en": "Ventilated driver seat",
+      "category": "Seats"
+    },
+    {
+      "code": "077",
+      "en": "Ventilated passenger seat",
+      "category": "Seats"
+    },
+    {
+      "code": "090",
+      "en": "Ventilated rear seats",
+      "category": "Seats"
+    },
+    {
+      "code": "091",
+      "en": "Massage seats",
+      "category": "Seats"
+    }
+  ]
+}

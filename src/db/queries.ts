@@ -65,6 +65,9 @@ export interface CarRow {
   modify_date: string | null;
   first_seen_at: string;
   last_fetched_at: string;
+  /** 'active' | 'sold' | 'unknown' — has the listing been pulled from Encar? */
+  listing_state: string;
+  last_status_check_at: string | null;
 }
 
 export interface CarRowWithBlobs extends CarRow {
@@ -230,6 +233,102 @@ export function getCar(carId: number): ParsedCar | null {
 }
 
 /**
+ * Read from cache; fall back to a live Encar fetch + ingest on miss.
+ * Enrichment data is immutable per ModifiedDate, so once cached the row
+ * stays valid until the listing is updated upstream (refresh button covers that).
+ *
+ * Cold-cache fetches go through ENRICH_LIMIT so 20 simultaneous calls from a
+ * search-page render don't all hit Encar at once.
+ */
+export async function getOrFetchCar(carId: number): Promise<ParsedCar | null> {
+  const cached = getCar(carId);
+  if (cached) return cached;
+
+  // Dynamic imports to keep this module side-effect-free for read-only callers.
+  const { fetchFullCar } = await import("../encar/client.js");
+  const { ingestCar } = await import("./ingest.js");
+  const { ENRICH_LIMIT } = await import("../encar/throttle.js");
+
+  const release = await ENRICH_LIMIT.acquire();
+  try {
+    // Re-check after acquiring — a sibling waiter may have populated this row.
+    const recheck = getCar(carId);
+    if (recheck) return recheck;
+
+    const data = await fetchFullCar(carId);
+    if (!data.vehicle) return null;
+    ingestCar(data);
+    return getCar(carId);
+  } finally {
+    release();
+  }
+}
+
+export interface CarEnrichment {
+  car_id: number;
+  vin: string | null;
+  has_inspection: boolean;
+  has_accident_history: boolean;
+  accident_count: number | null;
+  total_repair_cost_won: number | null;
+  owner_change_count: number | null;
+  flood_damage_count: number | null;
+  theft_count: number | null;
+  total_loss_count: number | null;
+  uninsured_periods_count: number | null;
+  business_use: boolean;
+  government_use: boolean;
+  has_water_log: boolean;
+  /** True if the underlying detail fetch failed and we have no enrichment to show. */
+  unavailable: boolean;
+}
+
+/**
+ * Compact projection of the enrichment fields used by search-result badges
+ * and post-filtering. Backed by getOrFetchCar so first hit fetches + caches,
+ * later hits are cheap DB reads.
+ */
+export async function enrichCarSummary(carId: number): Promise<CarEnrichment> {
+  const car = await getOrFetchCar(carId).catch(() => null);
+  if (!car) {
+    return {
+      car_id: carId,
+      vin: null,
+      has_inspection: false,
+      has_accident_history: false,
+      accident_count: null,
+      total_repair_cost_won: null,
+      owner_change_count: null,
+      flood_damage_count: null,
+      theft_count: null,
+      total_loss_count: null,
+      uninsured_periods_count: null,
+      business_use: false,
+      government_use: false,
+      has_water_log: false,
+      unavailable: true,
+    };
+  }
+  return {
+    car_id: car.car_id,
+    vin: car.vin,
+    has_inspection: !!car.has_inspection,
+    has_accident_history: !!car.has_accident_history,
+    accident_count: car.accident_count,
+    total_repair_cost_won: car.total_repair_cost_won,
+    owner_change_count: car.owner_change_count,
+    flood_damage_count: car.flood_damage_count,
+    theft_count: car.theft_count,
+    total_loss_count: car.total_loss_count,
+    uninsured_periods_count: car.uninsured_periods_count,
+    business_use: !!car.business_use,
+    government_use: !!car.government_use,
+    has_water_log: !!car.has_water_log,
+    unavailable: false,
+  };
+}
+
+/**
  * Find ingested cars by VIN. Exact (17-char) match first; falls back to a
  * substring LIKE so partial / lowercased input still works. Multiple rows
  * can come back when the same physical car was re-listed (different car_id,
@@ -248,6 +347,70 @@ export function findCarsByVin(vin: string): CarRow[] {
   return db()
     .prepare("SELECT * FROM cars WHERE vin LIKE ? ORDER BY last_fetched_at DESC LIMIT 20")
     .all(`%${cleaned}%`) as CarRow[];
+}
+
+// -------- listing-state checks --------
+
+export type ListingState = "active" | "sold" | "unknown";
+
+/**
+ * Ping Encar to verify a cached car is still listed. 404 → 'sold'; 2xx → 'active';
+ * other errors → leave the row untouched and return null (we don't know).
+ *
+ * Always writes last_status_check_at, even when nothing else changed, so the
+ * shortlist's "skip if recent" logic actually skips next time.
+ */
+export async function checkCarStatus(carId: number): Promise<ListingState | null> {
+  const { fetchVehicle, EncarHttpError } = await import("../encar/client.js");
+  const { ENRICH_LIMIT } = await import("../encar/throttle.js");
+
+  const release = await ENRICH_LIMIT.acquire();
+  let state: ListingState | null = null;
+  try {
+    const vehicle = await fetchVehicle(carId);
+    state = vehicle ? "active" : "sold";
+  } catch (e) {
+    if (e instanceof EncarHttpError && e.status === 404) {
+      state = "sold";
+    } else {
+      // Network blip / 5xx / throttle — caller already has cached data; don't
+      // overwrite state on a transient. Leave last_status_check_at unchanged
+      // so we'll try again next render.
+      return null;
+    }
+  } finally {
+    release();
+  }
+
+  const now = new Date().toISOString();
+  db()
+    .prepare("UPDATE cars SET listing_state = ?, last_status_check_at = ? WHERE car_id = ?")
+    .run(state, now, carId);
+  return state;
+}
+
+/** True when the row hasn't been status-checked within the given window. */
+export function isStatusStale(
+  lastCheckedAt: string | null,
+  maxAgeMs: number,
+): boolean {
+  if (!lastCheckedAt) return true;
+  return Date.now() - new Date(lastCheckedAt).getTime() > maxAgeMs;
+}
+
+/** Car IDs whose status hasn't been verified within the given window — for the CLI sweep. */
+export function listStaleCars(maxAgeMs: number, limit?: number): number[] {
+  const threshold = new Date(Date.now() - maxAgeMs).toISOString();
+  const rows = db()
+    .prepare(
+      `SELECT car_id FROM cars
+       WHERE listing_state != 'sold'
+         AND (last_status_check_at IS NULL OR last_status_check_at < ?)
+       ORDER BY last_status_check_at IS NULL DESC, last_status_check_at ASC
+       ${limit ? "LIMIT ?" : ""}`,
+    )
+    .all(...(limit ? [threshold, limit] : [threshold])) as { car_id: number }[];
+  return rows.map((r) => r.car_id);
 }
 
 // -------- shortlist --------

@@ -9,6 +9,7 @@
     "catalog": "tsx src/cli/build-catalog.ts",
     "ingest": "tsx src/cli/ingest.ts",
     "backfill": "tsx src/cli/backfill.ts",
+    "check-status": "tsx src/cli/check-status.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "next start"

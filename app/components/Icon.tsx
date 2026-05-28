@@ -10,7 +10,8 @@ type Name =
   | "engine"
   | "body"
   | "seat"
-  | "bolt";
+  | "bolt"
+  | "refresh";
 
 const PATHS: Record<Name, JSX.Element> = {
   calendar: (
@@ -61,6 +62,12 @@ const PATHS: Record<Name, JSX.Element> = {
   bolt: (
     <>
       <path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z" />
+    </>
+  ),
+  refresh: (
+    <>
+      <path d="M21 12a9 9 0 11-3.5-7.1" />
+      <path d="M21 3v6h-6" />
     </>
   ),
 };

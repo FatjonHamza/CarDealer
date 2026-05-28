@@ -53,6 +53,16 @@ export const model = (m: string) => eq("Model", m);
 export const yearRange = (from: number, to: number) =>
   eq("Year", `range(${from}..${to})`);
 
+/** Price range in 만원 (units of 10,000 KRW). e.g. priceRange(0, 7000) = up to ₩70M. */
+export const priceRange = (from: number, to: number) =>
+  eq("Price", `range(${from}..${to})`);
+
+/** Mileage range in km. */
+export const mileageRange = (from: number, to: number) =>
+  eq("Mileage", `range(${from}..${to})`);
+
+export const fuelType = (f: string) => eq("FuelType", f);
+
 /** A standard "visible + imported + brand+model" query. */
 export function importedModelQuery(brand: string, modelGroupName: string): Expr {
   return and(visible, c(imported, c(manufacturer(brand), modelGroup(modelGroupName))));

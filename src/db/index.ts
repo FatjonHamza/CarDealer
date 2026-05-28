@@ -124,6 +124,12 @@ function migrate(d: Database.Database): void {
     "ALTER TABLE cars ADD COLUMN power_source TEXT",
     "ALTER TABLE cars ADD COLUMN drivetrain TEXT",
     "CREATE INDEX IF NOT EXISTS idx_cars_drivetrain ON cars(drivetrain)",
+    // Listing lifecycle: 'active' | 'sold' | 'unknown'. Separate from the Encar
+    // `status` ad column above. Default 'active' so existing rows don't show
+    // a misleading 'no longer listed' banner until they've actually been checked.
+    "ALTER TABLE cars ADD COLUMN listing_state TEXT NOT NULL DEFAULT 'active'",
+    "ALTER TABLE cars ADD COLUMN last_status_check_at TEXT",
+    "CREATE INDEX IF NOT EXISTS idx_cars_listing_state ON cars(listing_state)",
   ]) {
     try { d.exec(ddl); } catch (e) {
       // SQLite throws if column exists; that's fine.

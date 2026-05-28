@@ -1,11 +1,54 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import { searchCars, type CarRow, type SearchFilters } from "../../src/db/queries.js";
-import { tt } from "../../src/i18n.js";
-import { modelEnglish } from "../../src/catalog-lookup.js";
-import { photoUrl } from "../../src/photo.js";
-import { refreshSearchAction } from "../../src/actions.js";
+import catalog from "../../src/data/catalog.json" with { type: "json" };
+import { liveSearch, type LiveSearchFilters } from "../../src/encar/live-search.js";
+import { getKrwPerEur } from "../../src/fx.js";
+import { CardChrome } from "./CardChrome.js";
+import { SearchForm, type BrandOption, type InitialFilters } from "../SearchForm.js";
 
-const KRW_PER_EUR = 1400;
+const PAGE_SIZE = 20;
+
+const FUEL_OPTIONS: { value: string; label: string }[] = [
+  { value: "디젤", label: "Diesel" },
+  { value: "가솔린", label: "Gasoline" },
+  { value: "하이브리드", label: "Hybrid" },
+  { value: "전기", label: "Electric" },
+  { value: "플러그인하이브리드", label: "Plug-in Hybrid" },
+  { value: "LPG", label: "LPG" },
+];
+
+interface CatalogModel {
+  displayName?: string;
+  engName?: string;
+  count?: number;
+}
+interface CatalogBrand {
+  displayName?: string;
+  engName?: string;
+  count?: number;
+  models?: Record<string, CatalogModel>;
+}
+
+function brandList(): BrandOption[] {
+  const brands = catalog.brands as unknown as Record<string, CatalogBrand>;
+  return Object.entries(brands)
+    .map(([key, info]) => {
+      const models = Object.entries(info.models ?? {})
+        .map(([modelKey, m]) => ({
+          value: modelKey,
+          label: m.engName ?? m.displayName ?? modelKey,
+          count: m.count ?? 0,
+        }))
+        .sort((a, b) => b.count - a.count);
+      return {
+        key,
+        display: info.engName ?? key,
+        count: info.count ?? 0,
+        models,
+      };
+    })
+    .sort((a, b) => b.count - a.count);
+}
 
 interface SearchPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -23,199 +66,203 @@ function pickNum(v: string | string[] | undefined): number | undefined {
   return Number.isFinite(n) ? n : undefined;
 }
 
-function priceM(p: number | null): string {
-  if (p == null) return "—";
-  return `₩${(p / 1_000_000).toFixed(1)}M`;
+interface ParsedParams {
+  filters: LiveSearchFilters;
+  page: number;
+  rawParams: Record<string, string | string[] | undefined>;
 }
 
-function priceEur(p: number | null): string {
-  if (p == null) return "";
-  return `€${Math.round(p / KRW_PER_EUR).toLocaleString()}`;
+function parse(sp: Record<string, string | string[] | undefined>): ParsedParams {
+  const page = Math.max(1, pickNum(sp.page) ?? 1);
+  const filters: LiveSearchFilters = {
+    brand: pickStr(sp.brand),
+    model: pickStr(sp.model),
+    maxPriceMan: pickNum(sp.maxPriceM) ? pickNum(sp.maxPriceM)! * 100 : undefined,
+    maxMileageKm: pickNum(sp.maxMileage),
+    minYear: pickNum(sp.minYear),
+    maxYear: pickNum(sp.maxYear),
+    fuel: pickStr(sp.fuel) || undefined,
+    sort: (pickStr(sp.sort) as LiveSearchFilters["sort"]) ?? "fresh",
+    limit: PAGE_SIZE,
+    offset: (page - 1) * PAGE_SIZE,
+  };
+  return { filters, page, rawParams: sp };
 }
 
-function yearFromFirstReg(d: string | null): string {
-  if (!d || d.length < 4) return "—";
-  return d.slice(0, 4);
+/**
+ * Builds an `/search?...` query string preserving all current params except
+ * `page`, which is overridden. Used for Prev/Next links.
+ */
+function buildPageHref(sp: Record<string, string | string[] | undefined>, page: number): string {
+  const qs = new URLSearchParams();
+  for (const [k, v] of Object.entries(sp)) {
+    if (k === "page") continue;
+    const val = Array.isArray(v) ? v[0] : v;
+    if (val == null || val === "") continue;
+    qs.set(k, val);
+  }
+  qs.set("page", String(page));
+  return `/search?${qs.toString()}`;
 }
 
-function timeAgo(iso: string): string {
-  const ms = Date.now() - new Date(iso).getTime();
-  const min = Math.round(ms / 60_000);
-  if (min < 1) return "just now";
-  if (min < 60) return `${min} min ago`;
-  const hr = Math.round(min / 60);
-  if (hr < 24) return `${hr} hour${hr === 1 ? "" : "s"} ago`;
-  const d = Math.round(hr / 24);
-  return `${d} day${d === 1 ? "" : "s"} ago`;
+function initialFromParams(sp: Record<string, string | string[] | undefined>): InitialFilters {
+  return {
+    brand: pickStr(sp.brand),
+    model: pickStr(sp.model),
+    maxPriceM: pickStr(sp.maxPriceM),
+    maxMileage: pickStr(sp.maxMileage),
+    minYear: pickStr(sp.minYear),
+    maxYear: pickStr(sp.maxYear),
+    fuel: pickStr(sp.fuel),
+    sort: pickStr(sp.sort),
+  };
 }
 
-function redFlags(c: CarRow): string[] {
-  const flags: string[] = [];
-  if ((c.accident_count ?? 0) >= 3) flags.push(`${c.accident_count} accidents`);
-  if ((c.total_repair_cost_won ?? 0) >= 5_000_000) flags.push(`₩${((c.total_repair_cost_won ?? 0) / 1_000_000).toFixed(1)}M repairs`);
-  if ((c.owner_change_count ?? 0) >= 3) flags.push(`${c.owner_change_count} owners`);
-  if (c.flood_damage_count && c.flood_damage_count > 0) flags.push("Flood");
-  if (c.theft_count && c.theft_count > 0) flags.push("Theft");
-  if (c.total_loss_count && c.total_loss_count > 0) flags.push("Total loss");
-  if (c.has_water_log) flags.push("Water log");
-  if (c.business_use) flags.push("Business use");
-  if (c.uninsured_periods_count && c.uninsured_periods_count > 0) flags.push("Uninsured period");
-  return flags;
+function filterSummary(initial: InitialFilters, brands: BrandOption[]): string {
+  const parts: string[] = [];
+  if (initial.brand) {
+    const b = brands.find((br) => br.key === initial.brand);
+    parts.push(b?.display ?? initial.brand);
+  }
+  if (initial.model) {
+    const b = brands.find((br) => br.key === initial.brand);
+    const m = b?.models.find((mm) => mm.value === initial.model);
+    parts.push(m?.label ?? initial.model);
+  }
+  if (initial.minYear || initial.maxYear) {
+    parts.push(`${initial.minYear ?? "—"}–${initial.maxYear ?? "—"}`);
+  }
+  if (initial.maxPriceM) parts.push(`≤ ₩${initial.maxPriceM}M`);
+  if (initial.maxMileage) parts.push(`≤ ${Number(initial.maxMileage).toLocaleString()} km`);
+  if (initial.fuel) parts.push(String(initial.fuel));
+  return parts.length > 0 ? parts.join(" · ") : "no filters";
+}
+
+async function SearchResults({
+  params,
+}: {
+  params: ParsedParams;
+}) {
+  const { filters, page, rawParams } = params;
+
+  const [searchResult, krwPerEur] = await Promise.all([
+    liveSearch(filters).catch((e: unknown) => {
+      return { error: (e as Error).message || "Encar search failed" } as const;
+    }),
+    getKrwPerEur(),
+  ]);
+
+  if ("error" in searchResult) {
+    return (
+      <div className="text-sm bg-rose-50 dark:bg-rose-950/30 text-rose-900 dark:text-rose-200 border border-rose-200 dark:border-rose-900 px-3 py-3 rounded">
+        <strong className="font-semibold">Encar rate-limited us.</strong> {searchResult.error}
+      </div>
+    );
+  }
+
+  const { rows, totalCount } = searchResult;
+  const totalPages = Math.max(1, Math.ceil(totalCount / PAGE_SIZE));
+  const hasPrev = page > 1;
+  const hasNext = page < totalPages && rows.length === PAGE_SIZE;
+
+  return (
+    <>
+      <div>
+        <h2 className="text-xl font-semibold">
+          {totalCount.toLocaleString()} live result{totalCount === 1 ? "" : "s"}
+          {totalPages > 1 && (
+            <span className="text-base font-normal text-neutral-500 ml-2">
+              · page {page} of {totalPages}
+            </span>
+          )}
+        </h2>
+        <p className="text-xs text-neutral-500 mt-0.5">
+          Showing {rows.length === 0 ? 0 : (page - 1) * PAGE_SIZE + 1}–{(page - 1) * PAGE_SIZE + rows.length}.
+        </p>
+      </div>
+
+      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mt-4">
+        {rows.map((row) => (
+          <CardChrome key={row.car_id} listing={row} krwPerEur={krwPerEur} />
+        ))}
+      </ul>
+
+      {rows.length === 0 && (
+        <div className="text-sm text-neutral-600 dark:text-neutral-400 py-12 text-center">
+          No matches on Encar for these filters. Loosen them and try again.
+        </div>
+      )}
+
+      {(hasPrev || hasNext) && (
+        <nav className="flex items-center justify-between gap-3 mt-6 pt-4 border-t border-neutral-200 dark:border-neutral-800">
+          {hasPrev ? (
+            <Link
+              href={buildPageHref(rawParams, page - 1)}
+              className="text-sm px-3 py-2 rounded border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
+            >
+              ← Previous
+            </Link>
+          ) : (
+            <span className="text-sm px-3 py-2 rounded border border-neutral-200 dark:border-neutral-900 text-neutral-400">
+              ← Previous
+            </span>
+          )}
+          <span className="text-xs text-neutral-500">
+            Page {page} of {totalPages}
+          </span>
+          {hasNext ? (
+            <Link
+              href={buildPageHref(rawParams, page + 1)}
+              className="text-sm px-3 py-2 rounded border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
+            >
+              Next →
+            </Link>
+          ) : (
+            <span className="text-sm px-3 py-2 rounded border border-neutral-200 dark:border-neutral-900 text-neutral-400">
+              Next →
+            </span>
+          )}
+        </nav>
+      )}
+    </>
+  );
+}
+
+function SearchPending() {
+  return (
+    <div className="flex items-center gap-3 py-12 text-sm text-neutral-500">
+      <span className="inline-block w-4 h-4 rounded-full border-2 border-neutral-300 border-t-neutral-600 animate-spin" />
+      Searching Encar…
+    </div>
+  );
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const sp = await searchParams;
-  const drivetrainParam = pickStr(sp.drivetrain);
-  const filters: SearchFilters = {
-    brand: pickStr(sp.brand),
-    model: pickStr(sp.model),
-    maxPriceWon: pickNum(sp.maxPriceM) ? pickNum(sp.maxPriceM)! * 1_000_000 : undefined,
-    maxMileageKm: pickNum(sp.maxMileage),
-    minYear: pickNum(sp.minYear),
-    maxYear: pickNum(sp.maxYear),
-    maxAccidentCount: pickNum(sp.maxAcc),
-    maxOwnerChanges: pickNum(sp.maxOwn),
-    excludeFlood: pickStr(sp.noFlood) === "on",
-    fuel: pickStr(sp.fuel) || undefined,
-    drivetrain: drivetrainParam === "2WD" || drivetrainParam === "4WD" ? drivetrainParam : undefined,
-    vinUnique: pickStr(sp.vinUnique) === "on",
-    sort: (pickStr(sp.sort) as "price" | "mileage" | "year" | "fresh" | undefined) ?? "fresh",
-    limit: 100,
-  };
-
-  const cars = searchCars(filters);
-
-  // Newest last_fetched_at across the result set — proxy for "data freshness"
-  const newest = cars.reduce<string | null>((acc, c) => {
-    if (!acc) return c.last_fetched_at;
-    return c.last_fetched_at > acc ? c.last_fetched_at : acc;
-  }, null);
+  const params = parse(sp);
+  const brands = brandList();
+  const initial = initialFromParams(sp);
+  const summary = filterSummary(initial, brands);
 
   return (
     <div className="grid gap-4">
-      <div className="flex items-baseline justify-between gap-3 flex-wrap">
-        <div>
-          <h1 className="text-xl font-semibold">
-            {cars.length} result{cars.length === 1 ? "" : "s"}
-          </h1>
-          {newest && (
-            <p className="text-xs text-neutral-500 mt-0.5">
-              Newest data fetched {timeAgo(newest)}
-            </p>
-          )}
+      <details className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 group">
+        <summary className="cursor-pointer p-4 flex items-center justify-between gap-3 select-none">
+          <div className="flex items-baseline gap-3 flex-wrap min-w-0">
+            <span className="font-semibold">Filters</span>
+            <span className="text-sm text-neutral-500 truncate">{summary}</span>
+          </div>
+          <span className="text-xs text-neutral-400 group-open:hidden">Edit ▾</span>
+          <span className="text-xs text-neutral-400 hidden group-open:inline">Collapse ▴</span>
+        </summary>
+        <div className="px-4 pb-4 border-t border-neutral-100 dark:border-neutral-900 pt-4">
+          <SearchForm brands={brands} fuels={FUEL_OPTIONS} initial={initial} />
         </div>
-        <div className="flex items-center gap-3">
-          {filters.brand && (
-            <form action={refreshSearchAction}>
-              <input type="hidden" name="brand" value={filters.brand} />
-              {filters.model && <input type="hidden" name="model" value={filters.model} />}
-              <button
-                type="submit"
-                title="Re-fetch the first 20 listings from Encar for this brand+model"
-                className="text-sm px-3 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
-              >
-                ↻ Refresh from Encar
-              </button>
-            </form>
-          )}
-          <Link href="/" className="text-sm text-blue-600 hover:underline">
-            ← refine search
-          </Link>
-        </div>
-      </div>
+      </details>
 
-      <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-        {cars.map((c) => {
-          const flags = redFlags(c);
-          const photo = photoUrl(c.featured_photo_path);
-          return (
-            <li
-              key={c.car_id}
-              className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 overflow-hidden hover:shadow-sm transition-shadow"
-            >
-              <Link href={`/car/${c.car_id}`} className="block">
-                {photo ? (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    src={photo}
-                    alt=""
-                    loading="lazy"
-                    className="w-full aspect-[4/3] object-cover bg-neutral-100 dark:bg-neutral-900"
-                  />
-                ) : (
-                  <div className="w-full aspect-[4/3] bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center text-xs text-neutral-400">
-                    no photo
-                  </div>
-                )}
-                <div className="p-4">
-                <div className="flex items-baseline justify-between gap-2">
-                  <h2 className="font-semibold leading-tight">
-                    {c.manufacturer_eng ?? c.manufacturer} {modelEnglish(c.manufacturer, c.model)}
-                  </h2>
-                  <span className="text-sm font-mono whitespace-nowrap">
-                    {priceM(c.price_won)}
-                    <span className="text-neutral-500 ml-1 text-xs">{priceEur(c.price_won)}</span>
-                  </span>
-                </div>
-                <div className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-                  {c.grade_english || c.grade_name || "—"}
-                </div>
-                <div className="text-xs text-neutral-500 mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
-                  <span>{yearFromFirstReg(c.first_registration_date)}</span>
-                  <span>{c.mileage_km != null ? `${c.mileage_km.toLocaleString()} km` : "—"}</span>
-                  <span>{c.fuel ? tt(c.fuel, "fuel") : "—"}</span>
-                  <span>{c.transmission ? tt(c.transmission, "transmission") : "—"}</span>
-                  {c.drivetrain && (
-                    <span
-                      className={
-                        c.drivetrain === "4WD"
-                          ? "px-1.5 py-0.5 rounded text-[10px] font-semibold bg-emerald-100 dark:bg-emerald-950/40 text-emerald-800 dark:text-emerald-300"
-                          : "px-1.5 py-0.5 rounded text-[10px] font-semibold bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
-                      }
-                    >
-                      {c.drivetrain}
-                    </span>
-                  )}
-                  {c.power_hp && (
-                    <span className="text-neutral-600 dark:text-neutral-400">
-                      {c.power_hp} hp
-                    </span>
-                  )}
-                </div>
-                {c.has_accident_history ? (
-                  <div className="text-xs mt-2">
-                    <span className="text-neutral-500">Accidents: </span>
-                    <span className={c.accident_count && c.accident_count > 0 ? "text-amber-700 dark:text-amber-400" : "text-emerald-700 dark:text-emerald-400"}>
-                      {c.accident_count ?? 0}
-                    </span>
-                    {(c.owner_change_count ?? 0) > 0 && (
-                      <span className="text-neutral-500"> · {c.owner_change_count} owner{c.owner_change_count === 1 ? "" : "s"}</span>
-                    )}
-                  </div>
-                ) : (
-                  <div className="text-xs mt-2 text-neutral-400 italic">No accident data</div>
-                )}
-                {flags.length > 0 && (
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {flags.map((f) => (
-                      <span key={f} className="text-xs bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300 px-1.5 py-0.5 rounded">
-                        {f}
-                      </span>
-                    ))}
-                  </div>
-                )}
-                </div>
-              </Link>
-            </li>
-          );
-        })}
-      </ul>
-
-      {cars.length === 0 && (
-        <div className="text-sm text-neutral-600 dark:text-neutral-400 py-12 text-center">
-          No matches. Loosen filters or ingest more cars.
-        </div>
-      )}
+      <Suspense fallback={<SearchPending />}>
+        <SearchResults params={params} />
+      </Suspense>
     </div>
   );
 }

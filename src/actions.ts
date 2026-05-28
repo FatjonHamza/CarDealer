@@ -2,11 +2,17 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
-import { addToShortlist, findCarsByVin, removeFromShortlist } from "./db/queries.js";
+import {
+  addToShortlist,
+  checkCarStatus,
+  findCarsByVin,
+  removeFromShortlist,
+} from "./db/queries.js";
 import { fetchFullCar, searchListings } from "./encar/client.js";
 import { and, c, eq } from "./encar/query.js";
 import { ingestCar } from "./db/ingest.js";
 import { findModelGroupKey } from "./catalog-lookup.js";
+import { db } from "./db/index.js";
 
 export async function toggleShortlistAction(formData: FormData): Promise<void> {
   const carId = Number(formData.get("carId"));
@@ -21,6 +27,25 @@ export async function toggleShortlistAction(formData: FormData): Promise<void> {
 
   revalidatePath(`/car/${carId}`);
   revalidatePath("/shortlist");
+}
+
+/**
+ * Background status check, called from the detail page's StatusCheckBeacon
+ * client component on mount. Only revalidates when the status actually
+ * changed — most calls are no-ops, so this is safe to fire on every page view.
+ */
+export async function checkCarStatusAction(carId: number): Promise<void> {
+  if (!Number.isFinite(carId)) return;
+  const prevRow = db()
+    .prepare("SELECT listing_state FROM cars WHERE car_id = ?")
+    .get(carId) as { listing_state: string } | undefined;
+  if (!prevRow) return;
+
+  const result = await checkCarStatus(carId).catch(() => null);
+  if (result && result !== prevRow.listing_state) {
+    revalidatePath(`/car/${carId}`);
+    revalidatePath("/shortlist");
+  }
 }
 
 /**
