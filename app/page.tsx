@@ -1,16 +1,10 @@
-import Link from "next/link";
 import catalog from "../src/data/catalog.json" with { type: "json" };
-import { dbStats } from "../src/db/queries.js";
-import { SearchForm, type BrandOption } from "./SearchForm.js";
+import { liveSearch } from "../src/encar/live-search.js";
+import { getKrwPerEur, krwToEur } from "../src/fx.js";
+import { LandingClient } from "./landing/Sections";
+import type { BrandOption, FeaturedCar } from "./landing/types";
 
-const FUEL_OPTIONS: { value: string; label: string }[] = [
-  { value: "디젤", label: "Diesel" },
-  { value: "가솔린", label: "Gasoline" },
-  { value: "하이브리드", label: "Hybrid" },
-  { value: "전기", label: "Electric" },
-  { value: "플러그인하이브리드", label: "Plug-in Hybrid" },
-  { value: "LPG", label: "LPG" },
-];
+const PHOTO_CDN = "https://ci.encar.com";
 
 interface CatalogModel {
   displayName?: string;
@@ -24,65 +18,51 @@ interface CatalogBrand {
   models?: Record<string, CatalogModel>;
 }
 
-function brandList(): BrandOption[] {
+function buildBrandOptions(): BrandOption[] {
   const brands = catalog.brands as unknown as Record<string, CatalogBrand>;
   return Object.entries(brands)
-    .map(([key, info]) => {
-      const models = Object.entries(info.models ?? {})
-        .map(([modelKey, m]) => ({
-          // The search-page filter pipeline runs the value through
-          // findModelGroupKey, which already accepts the Korean key directly —
-          // so submitting the catalog key is the most reliable round-trip.
-          value: modelKey,
-          label: m.engName ?? m.displayName ?? modelKey,
+    .map(([key, info]) => ({
+      key,
+      label: info.engName ?? info.displayName ?? key,
+      count: info.count ?? 0,
+      models: Object.entries(info.models ?? {})
+        .map(([mKey, m]) => ({
+          key: mKey,
+          label: m.engName ?? m.displayName ?? mKey,
           count: m.count ?? 0,
         }))
-        .sort((a, b) => b.count - a.count);
-      return {
-        key,
-        display: info.engName ?? key,
-        count: info.count ?? 0,
-        models,
-      };
-    })
-    .sort((a, b) => b.count - a.count);
+        .sort((a, b) => b.count - a.count)
+        .map(({ key, label }) => ({ key, label })),
+    }))
+    .sort((a, b) => b.count - a.count)
+    .map(({ key, label, models }) => ({ key, label, models }));
 }
 
-export default function HomePage() {
-  const brands = brandList();
-  const stats = dbStats();
+async function loadFeatured(): Promise<{ cars: FeaturedCar[] }> {
+  const [search, krwPerEur] = await Promise.all([
+    liveSearch({ sort: "fresh", limit: 6, offset: 0 }).catch(() => null),
+    getKrwPerEur(),
+  ]);
+  if (!search) return { cars: [] };
+  const cars: FeaturedCar[] = search.rows.map((r) => ({
+    car_id: r.car_id,
+    brand_eng: r.manufacturer_eng ?? r.manufacturer,
+    model_eng: r.model_eng ?? r.model,
+    grade: r.grade_english ?? r.grade_name ?? null,
+    year: r.year,
+    mileage_km: r.mileage_km,
+    fuel: r.fuel,
+    transmission: r.transmission,
+    drivetrain: r.drivetrain,
+    power_hp: r.power_hp,
+    price_eur: krwToEur(r.price_won, krwPerEur) ?? 0,
+    photo_url: r.photo_prefix ? `${PHOTO_CDN}${r.photo_prefix}001.jpg` : null,
+  }));
+  return { cars };
+}
 
-  return (
-    <div className="grid gap-8">
-      <section>
-        <h1 className="text-2xl font-bold">Search Encar — live</h1>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">
-          Every search hits Encar directly. KIDI accident history &amp; inspection load on
-          click and are cached locally — {stats.total.toLocaleString()} cars already in cache.
-        </p>
-      </section>
-
-      <section className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 p-5">
-        <SearchForm brands={brands} fuels={FUEL_OPTIONS} />
-        <p className="text-xs text-neutral-500 mt-3 leading-relaxed">
-          Max accidents / max owners / exclude flood need per-car KIDI data, so cards appear first
-          and the filter applies as enrichment streams in. Cached cars filter instantly.
-        </p>
-      </section>
-
-      <section>
-        <h2 className="font-semibold mb-2">Browse by brand</h2>
-        <ul className="text-sm grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-1">
-          {brands.map((b) => (
-            <li key={b.key}>
-              <Link href={`/search?brand=${encodeURIComponent(b.key)}`} className="text-blue-600 hover:underline">
-                {b.display}
-              </Link>
-              <span className="text-neutral-500"> ({b.count.toLocaleString()})</span>
-            </li>
-          ))}
-        </ul>
-      </section>
-    </div>
-  );
+export default async function LandingPage() {
+  const brands = buildBrandOptions();
+  const { cars } = await loadFeatured();
+  return <LandingClient brands={brands} featured={cars} />;
 }

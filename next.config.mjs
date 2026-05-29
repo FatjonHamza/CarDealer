@@ -1,5 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Self-contained server bundle for Docker / Railway: ~node_modules-free image
+  // with a single `node server.js` entrypoint.
+  output: "standalone",
   // better-sqlite3 is a native module — Next must not try to bundle it.
   serverExternalPackages: ["better-sqlite3"],
   // Encar photos are served from Encar's CDN — allow Next/Image to optimize them.

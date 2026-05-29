@@ -245,7 +245,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const summary = filterSummary(initial, brands);
 
   return (
-    <div className="grid gap-4">
+    <div className="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:px-6">
       <details className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 group">
         <summary className="cursor-pointer p-4 flex items-center justify-between gap-3 select-none">
           <div className="flex items-baseline gap-3 flex-wrap min-w-0">

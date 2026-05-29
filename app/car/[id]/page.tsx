@@ -478,7 +478,7 @@ export default async function CarDetailPage({ params }: DetailPageProps) {
   ];
 
   return (
-    <div className="grid gap-5 max-w-7xl mx-auto">
+    <div className="mx-auto grid max-w-7xl gap-5 px-4 py-10 sm:px-6">
       {needsStatusCheck && <StatusCheckBeacon carId={carId} />}
       {soldBanner}
 

@@ -1,0 +1,29 @@
+# Build / cache
+node_modules
+.next
+dist
+tsconfig.tsbuildinfo
+
+# Local data — Railway uses a mounted volume instead
+data
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+
+# Secrets / local config
+.env
+.env.local
+.env.*.local
+
+# Local tooling artifacts
+.claude
+.ingest
+*.log
+
+# Source-only / dev-only
+recon/dumps
+recon/screenshots
+.git
+.gitignore
+SVG

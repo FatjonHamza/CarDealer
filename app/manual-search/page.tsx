@@ -21,7 +21,7 @@ export default async function ManualSearchPage({ searchParams }: ManualSearchPag
   const krwPerEur = vinMatches.length > 0 ? await getKrwPerEur() : 0;
 
   return (
-    <div className="grid gap-6 max-w-3xl">
+    <div className="mx-auto grid max-w-3xl gap-6 px-4 py-10 sm:px-6">
       <section>
         <h1 className="text-2xl font-bold">Manual search</h1>
         <p className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">

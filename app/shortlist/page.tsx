@@ -207,7 +207,7 @@ export default async function ShortlistPage() {
 
   if (cars.length === 0) {
     return (
-      <div className="grid gap-3">
+      <div className="mx-auto grid max-w-7xl gap-3 px-4 py-10 sm:px-6">
         <h1 className="text-2xl font-bold">Shortlist</h1>
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
           Nothing here yet. Open a car detail page and click <em>Add to shortlist</em>.
@@ -220,7 +220,7 @@ export default async function ShortlistPage() {
   }
 
   return (
-    <div className="grid gap-4">
+    <div className="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:px-6">
       <div className="flex items-baseline justify-between">
         <h1 className="text-2xl font-bold">
           Shortlist — {cars.length} car{cars.length === 1 ? "" : "s"}
