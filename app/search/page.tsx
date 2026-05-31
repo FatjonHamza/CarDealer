@@ -5,6 +5,22 @@ import { liveSearch, type LiveSearchFilters } from "../../src/encar/live-search.
 import { getKrwPerEur } from "../../src/fx.js";
 import { CardChrome } from "./CardChrome.js";
 import { SearchForm, type BrandOption, type InitialFilters } from "../SearchForm.js";
+import { getDict, getLang } from "../i18n/server";
+import type { Dict } from "../i18n/dict";
+import type { Lang } from "../../src/i18n.js";
+
+type SearchT = Dict["searchPage"];
+
+function format(template: string, vars: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
+}
+
+export async function generateMetadata() {
+  const dict = await getDict();
+  // The search page is the Catalog/Browse view — reuse the nav label so the
+  // browser tab matches what the header link says.
+  return { title: dict.nav.browse };
+}
 
 const PAGE_SIZE = 20;
 
@@ -118,7 +134,7 @@ function initialFromParams(sp: Record<string, string | string[] | undefined>): I
   };
 }
 
-function filterSummary(initial: InitialFilters, brands: BrandOption[]): string {
+function filterSummary(initial: InitialFilters, brands: BrandOption[], t: SearchT, lang: Lang): string {
   const parts: string[] = [];
   if (initial.brand) {
     const b = brands.find((br) => br.key === initial.brand);
@@ -132,16 +148,20 @@ function filterSummary(initial: InitialFilters, brands: BrandOption[]): string {
   if (initial.minYear || initial.maxYear) {
     parts.push(`${initial.minYear ?? "—"}–${initial.maxYear ?? "—"}`);
   }
-  if (initial.maxPriceM) parts.push(`≤ ₩${initial.maxPriceM}M`);
-  if (initial.maxMileage) parts.push(`≤ ${Number(initial.maxMileage).toLocaleString()} km`);
+  if (initial.maxPriceM) parts.push(format(t.upTo, { n: initial.maxPriceM }));
+  if (initial.maxMileage) parts.push(format(t.upToKm, { n: Number(initial.maxMileage).toLocaleString(lang) }));
   if (initial.fuel) parts.push(String(initial.fuel));
-  return parts.length > 0 ? parts.join(" · ") : "no filters";
+  return parts.length > 0 ? parts.join(" · ") : t.noFilters;
 }
 
 async function SearchResults({
   params,
+  t,
+  lang,
 }: {
   params: ParsedParams;
+  t: SearchT;
+  lang: Lang;
 }) {
   const { filters, page, rawParams } = params;
 
@@ -155,7 +175,7 @@ async function SearchResults({
   if ("error" in searchResult) {
     return (
       <div className="text-sm bg-rose-50 dark:bg-rose-950/30 text-rose-900 dark:text-rose-200 border border-rose-200 dark:border-rose-900 px-3 py-3 rounded">
-        <strong className="font-semibold">Encar rate-limited us.</strong> {searchResult.error}
+        <strong className="font-semibold">{t.rateLimited}</strong> {searchResult.error}
       </div>
     );
   }
@@ -169,27 +189,30 @@ async function SearchResults({
     <>
       <div>
         <h2 className="text-xl font-semibold">
-          {totalCount.toLocaleString()} live result{totalCount === 1 ? "" : "s"}
+          {format(totalCount === 1 ? t.liveResultOne : t.liveResultMany, { n: totalCount.toLocaleString(lang) })}
           {totalPages > 1 && (
             <span className="text-base font-normal text-neutral-500 ml-2">
-              · page {page} of {totalPages}
+              · {format(t.pageOf, { p: page, t: totalPages })}
             </span>
           )}
         </h2>
         <p className="text-xs text-neutral-500 mt-0.5">
-          Showing {rows.length === 0 ? 0 : (page - 1) * PAGE_SIZE + 1}–{(page - 1) * PAGE_SIZE + rows.length}.
+          {format(t.showing, {
+            a: rows.length === 0 ? 0 : (page - 1) * PAGE_SIZE + 1,
+            b: (page - 1) * PAGE_SIZE + rows.length,
+          })}
         </p>
       </div>
 
       <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3 mt-4">
         {rows.map((row) => (
-          <CardChrome key={row.car_id} listing={row} krwPerEur={krwPerEur} />
+          <CardChrome key={row.car_id} listing={row} krwPerEur={krwPerEur} lang={lang} />
         ))}
       </ul>
 
       {rows.length === 0 && (
         <div className="text-sm text-neutral-600 dark:text-neutral-400 py-12 text-center">
-          No matches on Encar for these filters. Loosen them and try again.
+          {t.noMatches}
         </div>
       )}
 
@@ -200,26 +223,26 @@ async function SearchResults({
               href={buildPageHref(rawParams, page - 1)}
               className="text-sm px-3 py-2 rounded border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
             >
-              ← Previous
+              {t.prev}
             </Link>
           ) : (
             <span className="text-sm px-3 py-2 rounded border border-neutral-200 dark:border-neutral-900 text-neutral-400">
-              ← Previous
+              {t.prev}
             </span>
           )}
           <span className="text-xs text-neutral-500">
-            Page {page} of {totalPages}
+            {format(t.pageOf, { p: page, t: totalPages })}
           </span>
           {hasNext ? (
             <Link
               href={buildPageHref(rawParams, page + 1)}
               className="text-sm px-3 py-2 rounded border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
             >
-              Next →
+              {t.next}
             </Link>
           ) : (
             <span className="text-sm px-3 py-2 rounded border border-neutral-200 dark:border-neutral-900 text-neutral-400">
-              Next →
+              {t.next}
             </span>
           )}
         </nav>
@@ -228,40 +251,41 @@ async function SearchResults({
   );
 }
 
-function SearchPending() {
+function SearchPending({ label }: { label: string }) {
   return (
     <div className="flex items-center gap-3 py-12 text-sm text-neutral-500">
       <span className="inline-block w-4 h-4 rounded-full border-2 border-neutral-300 border-t-neutral-600 animate-spin" />
-      Searching Encar…
+      {label}
     </div>
   );
 }
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
-  const sp = await searchParams;
+  const [sp, dict, lang] = await Promise.all([searchParams, getDict(), getLang()]);
+  const t = dict.searchPage;
   const params = parse(sp);
   const brands = brandList();
   const initial = initialFromParams(sp);
-  const summary = filterSummary(initial, brands);
+  const summary = filterSummary(initial, brands, t, lang);
 
   return (
     <div className="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:px-6">
       <details className="rounded-lg border border-neutral-200 dark:border-neutral-800 bg-white dark:bg-neutral-950 group">
         <summary className="cursor-pointer p-4 flex items-center justify-between gap-3 select-none">
           <div className="flex items-baseline gap-3 flex-wrap min-w-0">
-            <span className="font-semibold">Filters</span>
+            <span className="font-semibold">{t.filtersTitle}</span>
             <span className="text-sm text-neutral-500 truncate">{summary}</span>
           </div>
-          <span className="text-xs text-neutral-400 group-open:hidden">Edit ▾</span>
-          <span className="text-xs text-neutral-400 hidden group-open:inline">Collapse ▴</span>
+          <span className="text-xs text-neutral-400 group-open:hidden">{t.edit}</span>
+          <span className="text-xs text-neutral-400 hidden group-open:inline">{t.collapse}</span>
         </summary>
         <div className="px-4 pb-4 border-t border-neutral-100 dark:border-neutral-900 pt-4">
           <SearchForm brands={brands} fuels={FUEL_OPTIONS} initial={initial} />
         </div>
       </details>
 
-      <Suspense fallback={<SearchPending />}>
-        <SearchResults params={params} />
+      <Suspense fallback={<SearchPending label={t.searching} />}>
+        <SearchResults params={params} t={t} lang={lang} />
       </Suspense>
     </div>
   );

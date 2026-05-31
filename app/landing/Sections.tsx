@@ -69,6 +69,10 @@ function SearchModule({ brands }: { brands: BrandOption[] }) {
   const [yf, setYf] = useState("");
   const [yt, setYt] = useState("");
   const [fuel, setFuel] = useState("");
+  const [maxPriceM, setMaxPriceM] = useState("");
+  const [maxMileage, setMaxMileage] = useState("");
+  const [sort, setSort] = useState("fresh");
+  const [expanded, setExpanded] = useState(false);
   const years: number[] = [];
   for (let y = 2024; y >= 2014; y--) years.push(y);
 
@@ -88,6 +92,9 @@ function SearchModule({ brands }: { brands: BrandOption[] }) {
     if (yf) qs.set("minYear", yf);
     if (yt) qs.set("maxYear", yt);
     if (fuel) qs.set("fuel", fuel);
+    if (maxPriceM) qs.set("maxPriceM", maxPriceM);
+    if (maxMileage) qs.set("maxMileage", maxMileage);
+    if (sort && sort !== "fresh") qs.set("sort", sort);
     router.push(`/search${qs.toString() ? "?" + qs.toString() : ""}`);
   };
 
@@ -157,13 +164,55 @@ function SearchModule({ brands }: { brands: BrandOption[] }) {
           </Field>
         </div>
       </div>
+      {expanded && (
+        <div className="mt-3 grid grid-cols-2 gap-3 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <Field label={t.search.maxPrice}>
+              <input
+                type="number"
+                min={0}
+                inputMode="numeric"
+                placeholder={t.search.maxPricePh}
+                value={maxPriceM}
+                onChange={(e) => setMaxPriceM(e.target.value)}
+                className="h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+              />
+            </Field>
+          </div>
+          <div className="lg:col-span-4">
+            <Field label={t.search.maxMileage}>
+              <input
+                type="number"
+                min={0}
+                step={10000}
+                inputMode="numeric"
+                placeholder={t.search.maxMileagePh}
+                value={maxMileage}
+                onChange={(e) => setMaxMileage(e.target.value)}
+                className="h-10 w-full rounded-lg border border-neutral-300 bg-white px-3 text-sm dark:border-neutral-700 dark:bg-neutral-900"
+              />
+            </Field>
+          </div>
+          <div className="lg:col-span-4">
+            <Field label={t.search.sortBy}>
+              <Select value={sort} onChange={(e) => setSort(e.target.value)}>
+                <option value="fresh">{t.search.sorts.fresh}</option>
+                <option value="price">{t.search.sorts.priceAsc}</option>
+                <option value="mileage">{t.search.sorts.mileageAsc}</option>
+                <option value="year">{t.search.sorts.yearDesc}</option>
+              </Select>
+            </Field>
+          </div>
+        </div>
+      )}
       <div className="mt-4 flex items-center justify-between gap-3">
-        <Link
-          href="/search"
+        <button
+          type="button"
+          onClick={() => setExpanded((v) => !v)}
           className="text-sm text-neutral-500 underline-offset-4 hover:text-neutral-900 hover:underline dark:text-neutral-400 dark:hover:text-white"
         >
-          {t.search.moreFilters}
-        </Link>
+          {expanded ? t.search.lessFilters : t.search.moreFilters}
+        </button>
         <Button type="submit" size="lg">
           <IconSearch size={17} />
           {t.search.searchBtn}
@@ -204,8 +253,6 @@ function Hero({ brands }: { brands: BrandOption[] }) {
               style={{ textWrap: "balance" } as React.CSSProperties}
             >
               {t.hero.title}
-              <br />
-              <span className="text-white/55">{t.hero.titleAccent}</span>
             </h1>
             <p className="fade-up mt-6 max-w-xl text-[16px] leading-relaxed text-white/80">{t.hero.subtitle}</p>
             <div className="fade-up mt-7 flex flex-wrap items-center gap-x-5 gap-y-2.5">

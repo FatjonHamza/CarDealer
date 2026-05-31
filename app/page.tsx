@@ -38,26 +38,42 @@ function buildBrandOptions(): BrandOption[] {
     .map(({ key, label, models }) => ({ key, label, models }));
 }
 
+// Featured carousel pulls from the three German premium brands KAK actually
+// imports. Keys are Encar's Korean Manufacturer strings.
+const FEATURED_BRANDS = ["BMW", "벤츠", "아우디"] as const;
+const FEATURED_PER_BRAND = 2;
+
 async function loadFeatured(): Promise<{ cars: FeaturedCar[] }> {
-  const [search, krwPerEur] = await Promise.all([
-    liveSearch({ sort: "fresh", limit: 6, offset: 0 }).catch(() => null),
+  const [krwPerEur, ...perBrand] = await Promise.all([
     getKrwPerEur(),
+    ...FEATURED_BRANDS.map((brand) =>
+      liveSearch({ brand, sort: "fresh", limit: FEATURED_PER_BRAND, offset: 0 }).catch(() => null),
+    ),
   ]);
-  if (!search) return { cars: [] };
-  const cars: FeaturedCar[] = search.rows.map((r) => ({
-    car_id: r.car_id,
-    brand_eng: r.manufacturer_eng ?? r.manufacturer,
-    model_eng: r.model_eng ?? r.model,
-    grade: r.grade_english ?? r.grade_name ?? null,
-    year: r.year,
-    mileage_km: r.mileage_km,
-    fuel: r.fuel,
-    transmission: r.transmission,
-    drivetrain: r.drivetrain,
-    power_hp: r.power_hp,
-    price_eur: krwToEur(r.price_won, krwPerEur) ?? 0,
-    photo_url: r.photo_prefix ? `${PHOTO_CDN}${r.photo_prefix}001.jpg` : null,
-  }));
+
+  // Interleave brand-by-brand so the carousel rotates Audi/BMW/Mercedes instead
+  // of grouping by brand.
+  const cars: FeaturedCar[] = [];
+  for (let i = 0; i < FEATURED_PER_BRAND; i++) {
+    for (const res of perBrand) {
+      const r = res?.rows[i];
+      if (!r) continue;
+      cars.push({
+        car_id: r.car_id,
+        brand_eng: r.manufacturer_eng ?? r.manufacturer,
+        model_eng: r.model_eng ?? r.model,
+        grade: r.grade_english ?? r.grade_name ?? null,
+        year: r.year,
+        mileage_km: r.mileage_km,
+        fuel: r.fuel,
+        transmission: r.transmission,
+        drivetrain: r.drivetrain,
+        power_hp: r.power_hp,
+        price_eur: krwToEur(r.price_won, krwPerEur) ?? 0,
+        photo_url: r.photo_prefix ? `${PHOTO_CDN}${r.photo_prefix}001.jpg` : null,
+      });
+    }
+  }
   return { cars };
 }
 

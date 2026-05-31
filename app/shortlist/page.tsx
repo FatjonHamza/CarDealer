@@ -5,11 +5,24 @@ import {
   isStatusStale,
   type CarRow,
 } from "../../src/db/queries.js";
-import { tt } from "../../src/i18n.js";
+import { tt, type Lang } from "../../src/i18n.js";
 import { toggleShortlistAction } from "../../src/actions.js";
-import { modelEnglish } from "../../src/catalog-lookup.js";
+import { brandEnglish, modelEnglish } from "../../src/catalog-lookup.js";
 import { getKrwPerEur, fmtEur } from "../../src/fx.js";
 import { photoUrlSized } from "../../src/photo.js";
+import { getDict, getLang } from "../i18n/server";
+import type { Dict } from "../i18n/dict";
+
+type ShortlistT = Dict["shortlist"];
+
+function format(template: string, vars: Record<string, string | number>): string {
+  return template.replace(/\{(\w+)\}/g, (_, k) => String(vars[k] ?? ""));
+}
+
+export async function generateMetadata() {
+  const dict = await getDict();
+  return { title: dict.shortlist.pageTitle };
+}
 
 const SHORTLIST_STATUS_STALE_MS = 6 * 60 * 60 * 1000;
 
@@ -39,137 +52,144 @@ function yearMonthNum(d: string | null | undefined): number | null {
   return Number(d.slice(0, 6));
 }
 
-function buildRows(krwPerEur: number): Row[] {
+function buildRows(krwPerEur: number, t: ShortlistT, lang: Lang): Row[] {
+  const noData = t.noData;
+  const yes = t.yes;
+  const no = t.no;
   return [
   // Spec
   {
-    label: "Year (first reg)",
+    label: t.rows.year,
     value: (c) => yearMonthNum(c.first_registration_date),
     render: (c) => yearFromFirstReg(c.first_registration_date),
     direction: "max",
   },
   {
-    label: "Mileage",
+    label: t.rows.mileage,
     value: (c) => c.mileage_km,
-    render: (c) => (c.mileage_km != null ? `${c.mileage_km.toLocaleString()} km` : "—"),
+    render: (c) => (c.mileage_km != null ? `${c.mileage_km.toLocaleString(lang)} km` : "—"),
     direction: "min",
   },
   {
-    label: "Price",
+    label: t.rows.price,
     value: (c) => c.price_won,
     render: (c) => fmtEur(c.price_won, krwPerEur),
     direction: "min",
   },
   {
-    label: "Fuel",
+    label: t.rows.fuel,
     value: () => null,
-    render: (c) => (c.fuel ? tt(c.fuel, "fuel") : "—"),
+    render: (c) => (c.fuel ? tt(c.fuel, "fuel", lang) : "—"),
   },
   {
-    label: "Transmission",
+    label: t.rows.transmission,
     value: () => null,
-    render: (c) => (c.transmission ? tt(c.transmission, "transmission") : "—"),
+    render: (c) => (c.transmission ? tt(c.transmission, "transmission", lang) : "—"),
   },
   {
-    label: "Color",
+    label: t.rows.color,
     value: () => null,
-    render: (c) => (c.color ? tt(c.color, "color") : "—"),
+    render: (c) => (c.color ? tt(c.color, "color", lang) : "—"),
   },
   {
-    label: "Engine cc",
+    label: t.rows.engineCc,
     value: (c) => c.displacement_cc,
     render: (c) => (c.displacement_cc ? `${c.displacement_cc} cc` : "—"),
   },
 
   // Accident
   {
-    label: "Accidents (total)",
+    label: t.rows.accidentsTotal,
     value: (c) => c.accident_count,
     render: (c) =>
       c.has_accident_history
-        ? `${c.accident_count ?? 0} (self ${c.self_accident_count ?? 0}, other ${c.other_accident_count ?? 0})`
-        : "no data",
+        ? format(t.accidentSelfOther, {
+            n: c.accident_count ?? 0,
+            self: c.self_accident_count ?? 0,
+            other: c.other_accident_count ?? 0,
+          })
+        : noData,
     direction: "min",
   },
   {
-    label: "Repair cost (KIDI)",
+    label: t.rows.repairCost,
     value: (c) => c.total_repair_cost_won,
-    render: (c) => (c.has_accident_history ? fmtEur(c.total_repair_cost_won, krwPerEur) : "no data"),
+    render: (c) => (c.has_accident_history ? fmtEur(c.total_repair_cost_won, krwPerEur) : noData),
     direction: "min",
   },
   {
-    label: "Owner changes",
+    label: t.rows.ownerChanges,
     value: (c) => c.owner_change_count,
-    render: (c) => (c.has_accident_history ? String(c.owner_change_count ?? 0) : "no data"),
+    render: (c) => (c.has_accident_history ? String(c.owner_change_count ?? 0) : noData),
     direction: "min",
   },
   {
-    label: "Plate changes",
+    label: t.rows.plateChanges,
     value: (c) => c.plate_change_count,
-    render: (c) => (c.has_accident_history ? String(c.plate_change_count ?? 0) : "no data"),
+    render: (c) => (c.has_accident_history ? String(c.plate_change_count ?? 0) : noData),
     direction: "min",
   },
   {
-    label: "Uninsured periods",
+    label: t.rows.uninsuredPeriods,
     value: (c) => c.uninsured_periods_count,
     render: (c) =>
-      c.has_accident_history ? String(c.uninsured_periods_count ?? 0) : "no data",
+      c.has_accident_history ? String(c.uninsured_periods_count ?? 0) : noData,
     direction: "min",
     highlight: "bad",
   },
   {
-    label: "Flood / theft / loss",
+    label: t.rows.floodTheftLoss,
     value: (c) => (c.flood_damage_count ?? 0) + (c.theft_count ?? 0) + (c.total_loss_count ?? 0),
     render: (c) =>
       c.has_accident_history
         ? `${c.flood_damage_count ?? 0} / ${c.theft_count ?? 0} / ${c.total_loss_count ?? 0}`
-        : "no data",
+        : noData,
     direction: "min",
     highlight: "bad",
   },
   {
-    label: "Business / gov use",
+    label: t.rows.businessGovUse,
     value: (c) => (c.business_use ?? 0) + (c.government_use ?? 0),
-    render: (c) => (c.has_accident_history ? `${c.business_use ? "Y" : "no"} / ${c.government_use ? "Y" : "no"}` : "no data"),
+    render: (c) => (c.has_accident_history ? `${c.business_use ? yes : no} / ${c.government_use ? yes : no}` : noData),
     direction: "min",
     highlight: "bad",
   },
 
   // Inspection
   {
-    label: "Inspector flagged accident",
+    label: t.rows.inspectorFlagged,
     value: (c) => c.inspector_says_accident,
     render: (c) =>
-      c.has_inspection ? (c.inspector_says_accident ? "YES" : "no") : "no data",
+      c.has_inspection ? (c.inspector_says_accident ? yes : no) : noData,
     direction: "min",
   },
   {
-    label: "Water log",
+    label: t.rows.waterLog,
     value: (c) => c.has_water_log,
-    render: (c) => (c.has_inspection ? (c.has_water_log ? "YES" : "no") : "no data"),
+    render: (c) => (c.has_inspection ? (c.has_water_log ? yes : no) : noData),
     direction: "min",
     highlight: "bad",
   },
   {
-    label: "Tuned",
+    label: t.rows.tuned,
     value: (c) => c.has_tuning,
-    render: (c) => (c.has_inspection ? (c.has_tuning ? "yes" : "no") : "no data"),
+    render: (c) => (c.has_inspection ? (c.has_tuning ? yes : no) : noData),
   },
   {
-    label: "Recall completed",
+    label: t.rows.recallCompleted,
     value: (c) => (c.recall_completed != null ? c.recall_completed : null),
     render: (c) =>
-      c.has_inspection ? (c.recall_completed ? "yes" : "no/NA") : "no data",
+      c.has_inspection ? (c.recall_completed ? yes : no) : noData,
   },
 
   // Metadata
   {
-    label: "Status",
+    label: t.rows.status,
     value: () => null,
     render: (c) => c.status ?? "—",
   },
   {
-    label: "First seen by us",
+    label: t.rows.firstSeen,
     value: () => null,
     render: (c) => c.first_seen_at.slice(0, 10),
   },
@@ -196,24 +216,25 @@ export default async function ShortlistPage() {
   // with Encar. Most loads will skip the check entirely.
   const initial = getShortlistedCars();
   const stale = initial.filter((c) => isStatusStale(c.last_status_check_at, SHORTLIST_STATUS_STALE_MS));
-  const [, krwPerEur] = await Promise.all([
+  const [, krwPerEur, dict, lang] = await Promise.all([
     stale.length > 0
       ? Promise.all(stale.map((c) => checkCarStatus(c.car_id).catch(() => null)))
       : Promise.resolve(null),
     getKrwPerEur(),
+    getDict(),
+    getLang(),
   ]);
+  const t = dict.shortlist;
   const cars = stale.length > 0 ? getShortlistedCars() : initial;
-  const rows = buildRows(krwPerEur);
+  const rows = buildRows(krwPerEur, t, lang);
 
   if (cars.length === 0) {
     return (
       <div className="mx-auto grid max-w-7xl gap-3 px-4 py-10 sm:px-6">
-        <h1 className="text-2xl font-bold">Shortlist</h1>
-        <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          Nothing here yet. Open a car detail page and click <em>Add to shortlist</em>.
-        </p>
+        <h1 className="text-2xl font-bold">{t.pageTitle}</h1>
+        <p className="text-sm text-neutral-600 dark:text-neutral-400">{t.emptyHint}</p>
         <p className="text-sm">
-          <Link href="/" className="text-blue-600 hover:underline">← Back to search</Link>
+          <Link href="/" className="text-blue-600 hover:underline">{t.backToSearch}</Link>
         </p>
       </div>
     );
@@ -223,9 +244,8 @@ export default async function ShortlistPage() {
     <div className="mx-auto grid max-w-7xl gap-4 px-4 py-10 sm:px-6">
       <div className="flex items-baseline justify-between">
         <h1 className="text-2xl font-bold">
-          Shortlist — {cars.length} car{cars.length === 1 ? "" : "s"}
+          {format(t.pageTitleWithCount, { n: cars.length, s: cars.length === 1 ? "" : "s" })}
         </h1>
-        <Link href="/" className="text-sm text-blue-600 hover:underline">← refine search</Link>
       </div>
 
       <div className="overflow-x-auto -mx-4 px-4 pb-4">
@@ -233,7 +253,7 @@ export default async function ShortlistPage() {
           <thead>
             <tr>
               <th className="sticky left-0 z-10 bg-neutral-50 dark:bg-neutral-900 text-left p-3 text-xs uppercase tracking-wide text-neutral-500 border-b border-neutral-200 dark:border-neutral-800 w-48">
-                Field
+                {t.field}
               </th>
               {cars.map((c) => {
                 const photo = photoUrlSized(c.featured_photo_path, "medium");
@@ -254,19 +274,19 @@ export default async function ShortlistPage() {
                         />
                       ) : (
                         <span className="w-full h-full flex items-center justify-center text-xs text-neutral-400">
-                          no photo
+                          {t.noPhoto}
                         </span>
                       )}
                     </Link>
                     <Link href={`/car/${c.car_id}`} className="font-semibold hover:underline block leading-tight">
-                      {c.manufacturer_eng ?? c.manufacturer} {modelEnglish(c.manufacturer, c.model)}
+                      {c.manufacturer_eng ?? brandEnglish(c.manufacturer) ?? c.manufacturer} {modelEnglish(c.manufacturer, c.model)}
                     </Link>
                     <div className="text-xs text-neutral-500 font-normal">
                       {c.grade_english || c.grade_name || ""}
                     </div>
                     {c.listing_state === "sold" && (
                       <span className="inline-block text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950/40 text-amber-900 dark:text-amber-300">
-                        No longer on Encar
+                        {t.noLongerOnEncar}
                       </span>
                     )}
                     <form action={toggleShortlistAction} className="pt-1">
@@ -276,7 +296,7 @@ export default async function ShortlistPage() {
                         type="submit"
                         className="text-xs text-neutral-500 hover:text-red-600 font-normal"
                       >
-                        Remove
+                        {t.remove}
                       </button>
                     </form>
                   </div>
@@ -323,10 +343,7 @@ export default async function ShortlistPage() {
         </table>
       </div>
 
-      <p className="text-xs text-neutral-500">
-        Green-highlighted cell = best in that row (lowest mileage, lowest price, fewest accidents, etc.).
-        Rows in amber are red-flag categories where you want all cars to be 0.
-      </p>
+      <p className="text-xs text-neutral-500">{t.legend}</p>
     </div>
   );
 }

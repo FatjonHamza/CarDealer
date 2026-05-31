@@ -130,6 +130,15 @@ function migrate(d: Database.Database): void {
     "ALTER TABLE cars ADD COLUMN listing_state TEXT NOT NULL DEFAULT 'active'",
     "ALTER TABLE cars ADD COLUMN last_status_check_at TEXT",
     "CREATE INDEX IF NOT EXISTS idx_cars_listing_state ON cars(listing_state)",
+    // Cached English translation of inspection_comments (Korean free-form text
+    // from the dealer inspection report). Populated lazily via Claude when the
+    // user requests it from the car page; persisted so we only pay once per car.
+    "ALTER TABLE cars ADD COLUMN inspection_comments_translated TEXT",
+    // Cached English translation of grade_name (the Korean Badge string from
+    // Encar — e.g. "2.0 디럭스" → "2.0 Deluxe"). Translated on first car-detail
+    // view via the free Google translate endpoint; persisted so we don't hit
+    // the network again.
+    "ALTER TABLE cars ADD COLUMN grade_translated_en TEXT",
   ]) {
     try { d.exec(ddl); } catch (e) {
       // SQLite throws if column exists; that's fine.

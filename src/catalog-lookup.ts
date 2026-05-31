@@ -24,6 +24,26 @@ const BRANDS = catalog.brands as unknown as Record<string, Brand>;
 
 const SUFFIX_MAP = dict.modelSuffix as Record<string, string>;
 
+// catalog.json is built from Encar's *imported* (CarType=N) listings only, so
+// Korean domestic makes (Hyundai, Kia, Genesis, etc.) never appear there even
+// though their cars show up in unfiltered searches. This supplemental map
+// keeps the UI from leaking raw Korean for the brands KAK is most likely to
+// encounter.
+const KOREAN_BRAND_FALLBACK: Record<string, string> = {
+  "현대": "Hyundai",
+  "기아": "Kia",
+  "제네시스": "Genesis",
+  "쌍용": "SsangYong",
+  "KG모빌리티": "KG Mobility",
+  "케이지모빌리티": "KG Mobility",
+  "르노삼성": "Renault Samsung",
+  "르노코리아": "Renault Korea",
+  "대우": "Daewoo",
+  "쉐보레(GM대우)": "Chevrolet",
+  "GM대우": "GM Daewoo",
+  "삼성": "Samsung Motors",
+};
+
 /** Replace any Korean suffix tokens in a string with their English equivalents. */
 function translateSuffixes(s: string): string {
   let out = s;
@@ -42,7 +62,8 @@ function translateSuffixes(s: string): string {
 export function brandEnglish(manufacturerKey: string | null | undefined): string | null {
   if (!manufacturerKey) return null;
   const b = BRANDS[manufacturerKey];
-  return b?.engName ?? null;
+  if (b?.engName) return b.engName;
+  return KOREAN_BRAND_FALLBACK[manufacturerKey] ?? null;
 }
 
 /**

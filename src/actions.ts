@@ -49,6 +49,23 @@ export async function checkCarStatusAction(carId: number): Promise<void> {
 }
 
 /**
+ * Translate the Korean inspector-comments block to English via Claude. Result
+ * is cached on the car row, so this is a no-op after the first successful call.
+ * Called from the detail page "Translate to English" button.
+ */
+export async function translateInspectionAction(formData: FormData): Promise<void> {
+  const carId = Number(formData.get("carId"));
+  if (!Number.isFinite(carId)) return;
+  try {
+    const { translateInspectionComments } = await import("./translate.js");
+    await translateInspectionComments(carId);
+  } catch (e) {
+    console.error(`translateInspectionAction(${carId}) failed:`, (e as Error).message);
+  }
+  revalidatePath(`/car/${carId}`);
+}
+
+/**
  * Re-fetch a single car from Encar and update the DB row.
  * Called from the detail page Refresh button.
  */

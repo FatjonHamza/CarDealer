@@ -1,0 +1,160 @@
+{
+  "_meta": "Albanian translations for the high-traffic enum categories rendered on the car/search/shortlist pages. Sparse on purpose — missing entries fall back to the English value in dictionary.json. Extend as you find new Korean values worth localising.",
+
+  "fuel": {
+    "디젤": "Dizel",
+    "가솔린": "Benzinë",
+    "하이브리드": "Hibrid",
+    "전기": "Elektrik",
+    "LPG": "Gaz (LPG)",
+    "수소": "Hidrogjen",
+    "플러그인하이브리드": "Plug-in hibrid",
+    "가솔린+CNG": "Benzinë + CNG",
+    "디젤+전기": "Dizel + Elektrik"
+  },
+
+  "transmission": {
+    "오토": "Automatik",
+    "수동": "Manual",
+    "세미오토": "Gjysmë-automatik",
+    "자동변속기(A/T)": "Automatik (A/T)",
+    "수동변속기(M/T)": "Manual (M/T)",
+    "CVT": "CVT",
+    "DCT": "DCT"
+  },
+
+  "color": {
+    "흰색": "E bardhë",
+    "검정": "E zezë",
+    "검정색": "E zezë",
+    "은색": "Argjend",
+    "회색": "Gri",
+    "쥐색": "Gri",
+    "진주": "Perlë",
+    "진주색": "Perlë",
+    "파랑": "Blu",
+    "파란색": "Blu",
+    "빨강": "E kuqe",
+    "빨간색": "E kuqe",
+    "초록": "E gjelbër",
+    "노랑": "E verdhë",
+    "주황": "Portokalli",
+    "갈색": "Kafe",
+    "베이지": "Bezhë",
+    "와인색": "Verë",
+    "골드": "Ari",
+    "보라색": "Vjollcë",
+    "무채색": "Pa ngjyrë",
+    "기타": "Tjetër"
+  },
+
+  "status": {
+    "양호": "Mirë",
+    "정상": "Normal",
+    "불량": "I dëmtuar",
+    "보통": "Mesatar",
+    "교환": "I zëvendësuar",
+    "교환(교체)": "I zëvendësuar",
+    "판금": "Karroceri",
+    "판금/용접": "Karroceri / saldim",
+    "용접": "I salduar",
+    "용접,절단": "I salduar dhe i prerë",
+    "부식": "Korrozion",
+    "흠집": "Gërvishtje",
+    "손상": "I dëmtuar",
+    "수리": "I riparuar",
+    "수리필요": "Kërkon riparim",
+    "없음": "Asnjë",
+    "있음": "Po",
+    "확인필요": "Kërkon kontroll",
+    "누유": "Rrjedhje vaji",
+    "누수": "Rrjedhje",
+    "미세누유": "Rrjedhje e lehtë vaji",
+    "미세누수": "Rrjedhje e lehtë",
+    "과다": "E tepruar",
+    "부족": "E pamjaftueshme",
+    "적정": "E mjaftueshme",
+    "적법": "Legjale",
+    "불법": "Jolegjale",
+    "광택": "E lustruar",
+    "기본품목": "Pajisje standarde",
+    "보유상태": "I instaluar"
+  },
+
+  "recall": {
+    "이행": "I kryer",
+    "미이행": "I pakryer",
+    "해당없음": "Nuk aplikohet"
+  },
+
+  "carShape": {
+    "SUV": "SUV",
+    "세단": "Sedan",
+    "쿠페": "Kupe",
+    "해치백": "Hatchback",
+    "왜건": "Vagon",
+    "컨버터블": "Kabriolet",
+    "리무진": "Limuzinë",
+    "픽업": "Pikap",
+    "밴": "Furgon",
+    "RV": "RV"
+  },
+
+  "panel": {
+    "후드": "Kapaku i motorit",
+    "프론트 휀더(좌)": "Para-mbrojtësja majtas",
+    "프론트 휀더(우)": "Para-mbrojtësja djathtas",
+    "프론트 도어(좌)": "Dera para majtas",
+    "프론트 도어(우)": "Dera para djathtas",
+    "리어 도어(좌)": "Dera prapa majtas",
+    "리어 도어(우)": "Dera prapa djathtas",
+    "트렁크 리드": "Kapaku i bagazhit",
+    "루프": "Tavani",
+    "쿼터 패널(좌)": "Pjesa anësore prapa majtas",
+    "쿼터 패널(우)": "Pjesa anësore prapa djathtas",
+    "사이드실 패널(좌)": "Pragu i derës majtas",
+    "사이드실 패널(우)": "Pragu i derës djathtas",
+    "프론트 사이드 멤버(좌)": "Trari anësor para majtas",
+    "프론트 사이드 멤버(우)": "Trari anësor para djathtas",
+    "인사이드 패널(좌)": "Paneli i brendshëm majtas",
+    "인사이드 패널(우)": "Paneli i brendshëm djathtas",
+    "라디에이터 서포트(볼트체결부품)": "Mbështetësja e radiatorit (i shkëputshëm)",
+    "리어 패널": "Paneli i pasmë",
+    "프론트 패널": "Paneli i përparmë",
+    "프론트 범퍼": "Parakolpi i përparmë",
+    "리어 범퍼": "Parakolpi i pasmë",
+    "앞면": "Para",
+    "뒷면": "Prapa"
+  },
+
+  "diagnosisResult": {
+    "NORMAL": "Normal",
+    "EXCHANGED": "I zëvendësuar",
+    "WELDED": "I salduar",
+    "BODYWORK": "Karroceri",
+    "SCRATCH": "Gërvishtje",
+    "DENT": "Goditje",
+    "CORRODED": "Korrozion"
+  },
+
+  "verdict": {
+    "무사고": "Pa aksident",
+    "사고": "Me aksident",
+    "단순교환": "Vetëm zëvendësim i thjeshtë",
+    "단순수리": "Vetëm riparim i thjeshtë",
+    "단순판금": "Vetëm karroceri e lehtë"
+  },
+
+  "accidentType": {
+    "1": "Vetë (kjo veturë e dëmtuar)",
+    "2": "Tjetri (vetura tjetër e dëmtuar)",
+    "3": "I kombinuar"
+  },
+
+  "usageFlag": {
+    "1": "Privat",
+    "2": "Biznes",
+    "3": "Me qira",
+    "4": "Qeveritar"
+  }
+}

@@ -43,6 +43,8 @@ export interface CarRow {
   recall_completed: number | null;
   inspector_says_accident: number | null;
   inspection_comments: string | null;
+  inspection_comments_translated: string | null;
+  grade_translated_en: string | null;
   inspection_supply_num: string | null;
   accident_count: number | null;
   self_accident_count: number | null;
@@ -206,7 +208,35 @@ export interface ParsedCar extends CarRow {
   accidentHistory: AccidentHistory | null;
   diagnosis: Diagnosis | null;
   duplicates: { car_id: number; first_seen_at: string }[];
+  /**
+   * When the current listing has no KIDI/accident data of its own, we fall back
+   * to a same-VIN sibling that does — the accident history belongs to the
+   * physical car, not the listing. This is the car_id of the sibling we
+   * borrowed from; null when the data came from the current row itself.
+   */
+  kidiSourceCarId: number | null;
 }
+
+// Fields denormalized from the KIDI accident_history blob during ingest.
+// When we borrow accident_history_json from a sibling listing, these must be
+// borrowed too so the flag pills and warnings reflect the same source.
+const KIDI_DENORMALIZED_FIELDS = [
+  "accident_count",
+  "self_accident_count",
+  "other_accident_count",
+  "total_repair_cost_won",
+  "owner_change_count",
+  "plate_change_count",
+  "flood_damage_count",
+  "theft_count",
+  "total_loss_count",
+  "uninsured_periods_count",
+  "business_use",
+  "government_use",
+  "has_accident_history",
+] as const;
+
+type KidiDenormRow = Pick<CarRowWithBlobs, "car_id" | "accident_history_json" | (typeof KIDI_DENORMALIZED_FIELDS)[number]>;
 
 export function getCar(carId: number): ParsedCar | null {
   const row = db()
@@ -220,15 +250,44 @@ export function getCar(carId: number): ParsedCar | null {
         .all(row.vin, carId) as { car_id: number; first_seen_at: string }[])
     : [];
 
-  const { vehicle_json, inspection_json, accident_history_json, diagnosis_json, ...rest } = row;
+  // KIDI is keyed by VIN — if the current row never got its accident history
+  // populated but a same-VIN sibling did, borrow it so the user sees the same
+  // record on every re-listing of the same physical car.
+  let kidiSourceCarId: number | null = null;
+  let accidentHistoryJson = row.accident_history_json;
+  // We rewrite the row's KIDI denorm fields in place when borrowing, so the
+  // rest of the page (flag pills, warnings) treats them identically to a
+  // normally-enriched row.
+  const rowWithBorrow: CarRowWithBlobs = { ...row };
+  if (!accidentHistoryJson && row.vin && dupes.length > 0) {
+    const sibling = db()
+      .prepare(
+        `SELECT car_id, accident_history_json, ${KIDI_DENORMALIZED_FIELDS.join(", ")}
+         FROM cars
+         WHERE vin = ? AND car_id != ? AND accident_history_json IS NOT NULL
+         ORDER BY last_fetched_at DESC
+         LIMIT 1`,
+      )
+      .get(row.vin, carId) as KidiDenormRow | undefined;
+    if (sibling) {
+      kidiSourceCarId = sibling.car_id;
+      accidentHistoryJson = sibling.accident_history_json;
+      for (const f of KIDI_DENORMALIZED_FIELDS) {
+        (rowWithBorrow as unknown as Record<string, unknown>)[f] = sibling[f];
+      }
+    }
+  }
+
+  const { vehicle_json, inspection_json, accident_history_json: _ignored, diagnosis_json, ...rest } = rowWithBorrow;
 
   return {
     ...rest,
     vehicle: vehicle_json ? (JSON.parse(vehicle_json) as Vehicle) : null,
     inspection: inspection_json ? (JSON.parse(inspection_json) as InspectionRecord) : null,
-    accidentHistory: accident_history_json ? (JSON.parse(accident_history_json) as AccidentHistory) : null,
+    accidentHistory: accidentHistoryJson ? (JSON.parse(accidentHistoryJson) as AccidentHistory) : null,
     diagnosis: diagnosis_json ? (JSON.parse(diagnosis_json) as Diagnosis) : null,
     duplicates: dupes,
+    kidiSourceCarId,
   };
 }
 

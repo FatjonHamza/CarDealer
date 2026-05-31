@@ -4,6 +4,8 @@ import { findCarsByVin } from "../../src/db/queries.js";
 import { modelEnglish } from "../../src/catalog-lookup.js";
 import { getKrwPerEur, fmtEur } from "../../src/fx.js";
 
+export const metadata = { title: "Manual search" };
+
 interface ManualSearchPageProps {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
 }

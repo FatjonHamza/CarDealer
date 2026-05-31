@@ -4,7 +4,7 @@
  */
 
 import Link from "next/link";
-import { tt } from "../../src/i18n.js";
+import { tt, type Lang } from "../../src/i18n.js";
 import type { ListingRow } from "../../src/encar/live-search.js";
 
 const PHOTO_CDN = "https://ci.encar.com";
@@ -21,9 +21,11 @@ function photoUrl(prefix: string | null): string | null {
 export function CardChrome({
   listing,
   krwPerEur,
+  lang,
 }: {
   listing: ListingRow;
   krwPerEur: number;
+  lang: Lang;
 }) {
   const photo = photoUrl(listing.photo_prefix);
 
@@ -55,9 +57,9 @@ export function CardChrome({
           <div className="text-sm text-neutral-600 dark:text-neutral-400 mt-1">{listing.grade_name}</div>
           <div className="text-xs text-neutral-500 mt-2 flex flex-wrap items-center gap-x-3 gap-y-1">
             <span>{listing.year}</span>
-            <span>{listing.mileage_km.toLocaleString()} km</span>
-            <span>{tt(listing.fuel, "fuel")}</span>
-            <span>{tt(listing.transmission, "transmission")}</span>
+            <span>{listing.mileage_km.toLocaleString(lang)} km</span>
+            <span>{tt(listing.fuel, "fuel", lang)}</span>
+            <span>{tt(listing.transmission, "transmission", lang)}</span>
             {listing.drivetrain && (
               <span
                 className={

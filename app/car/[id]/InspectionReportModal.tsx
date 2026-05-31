@@ -8,7 +8,8 @@
  */
 
 import { useEffect, useState } from "react";
-import { tt } from "../../../src/i18n.js";
+import { tt, type Lang } from "../../../src/i18n.js";
+import { useSite } from "../../i18n/Provider";
 import type {
   InspectionRecord,
   InspectionSection,
@@ -22,16 +23,19 @@ function fmtDate(d: string | null | undefined): string {
   return d.slice(0, 10);
 }
 
-function joinTitles(arr: CodeTitle[]): string {
-  return arr.map((c) => tt(c.title)).join(", ");
+function joinTitles(arr: CodeTitle[], lang: Lang): string {
+  return arr.map((c) => tt(c.title, undefined, lang)).join(", ");
 }
 
-function ItemRow({ item, depth = 0 }: { item: InspectionItem; depth?: number }) {
-  const name = tt(item.type.title);
-  const status = item.statusType ? tt(item.statusType.title) : null;
-  const subStatuses = (item.statusItemTypes ?? []).map((s) => tt(s.title)).join(", ");
-  const OK_STATUSES = new Set(["Good", "Normal", "None", "Adequate", "Standard item", "On board"]);
-  const isFlagged = !!status && !OK_STATUSES.has(status);
+// "OK" statuses are checked against their original Korean values so the
+// language toggle doesn't break the green/amber colour-coding.
+const OK_STATUS_KO = new Set(["양호", "정상", "없음", "적정", "기본품목", "보유상태"]);
+
+function ItemRow({ item, depth = 0, lang }: { item: InspectionItem; depth?: number; lang: Lang }) {
+  const name = tt(item.type.title, undefined, lang);
+  const status = item.statusType ? tt(item.statusType.title, undefined, lang) : null;
+  const subStatuses = (item.statusItemTypes ?? []).map((s) => tt(s.title, undefined, lang)).join(", ");
+  const isFlagged = !!item.statusType && !OK_STATUS_KO.has(item.statusType.title);
   return (
     <>
       <li
@@ -60,23 +64,23 @@ function ItemRow({ item, depth = 0 }: { item: InspectionItem; depth?: number }) 
         )}
       </li>
       {(item.children ?? []).map((c, i) => (
-        <ItemRow key={i} item={c} depth={depth + 1} />
+        <ItemRow key={i} item={c} depth={depth + 1} lang={lang} />
       ))}
     </>
   );
 }
 
-function Section({ section }: { section: InspectionSection }) {
+function Section({ section, lang }: { section: InspectionSection; lang: Lang }) {
   const children = section.children ?? [];
   if (children.length === 0) return null;
   return (
     <div className="mb-5">
       <h4 className="text-xs font-semibold uppercase tracking-wide text-neutral-500 dark:text-neutral-400 mb-2">
-        {tt(section.type.title)}
+        {tt(section.type.title, undefined, lang)}
       </h4>
       <ul className="text-sm">
         {children.map((c, i) => (
-          <ItemRow key={i} item={c} />
+          <ItemRow key={i} item={c} lang={lang} />
         ))}
       </ul>
     </div>
@@ -90,6 +94,8 @@ export function InspectionReportModal({
   inspection: InspectionRecord;
   encarUrl: string;
 }) {
+  const { lang, t: dict } = useSite();
+  const t = dict.inspectionReport;
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -110,40 +116,40 @@ export function InspectionReportModal({
   const d = m.detail;
 
   const headRows: { label: string; value: string }[] = [
-    { label: "Supply #", value: m.supplyNum || "—" },
-    { label: "Registered", value: fmtDate(m.registrationDate) },
+    { label: t.head.supplyNo, value: m.supplyNum || "—" },
+    { label: t.head.registered, value: fmtDate(m.registrationDate) },
   ];
   if (d) {
     headRows.push(
-      { label: "Issue date", value: fmtDate(d.issueDate) },
-      { label: "Validity", value: `${fmtDate(d.validityStartDate)} → ${fmtDate(d.validityEndDate)}` },
-      { label: "Inspector", value: d.inspName || "—" },
-      { label: "Notice (dealer)", value: d.noticeName || "—" },
-      { label: "VIN", value: d.vin || "—" },
-      { label: "Model year", value: d.modelYear || "—" },
-      { label: "First registration", value: fmtDate(d.firstRegistrationDate) },
-      { label: "Mileage at inspection", value: d.mileage != null ? `${d.mileage.toLocaleString()} km` : "—" },
-      { label: "Motor type", value: d.motorType || "—" },
-      { label: "Transmission", value: d.transmissionType ? tt(d.transmissionType.title) : "—" },
-      { label: "Guaranty", value: d.guarantyType ? tt(d.guarantyType.title) : "—" },
-      { label: "Color", value: d.colorType ? tt(d.colorType.title) : "—" },
-      { label: "Engine check", value: d.engineCheck || "—" },
-      { label: "Transmission check", value: d.trnsCheck || "—" },
+      { label: t.head.issueDate, value: fmtDate(d.issueDate) },
+      { label: t.head.validity, value: `${fmtDate(d.validityStartDate)} → ${fmtDate(d.validityEndDate)}` },
+      { label: t.head.inspector, value: d.inspName || "—" },
+      { label: t.head.noticeDealer, value: d.noticeName || "—" },
+      { label: t.head.vin, value: d.vin || "—" },
+      { label: t.head.modelYear, value: d.modelYear || "—" },
+      { label: t.head.firstRegistration, value: fmtDate(d.firstRegistrationDate) },
+      { label: t.head.mileageAtInspection, value: d.mileage != null ? `${d.mileage.toLocaleString(lang)} km` : "—" },
+      { label: t.head.motorType, value: d.motorType || "—" },
+      { label: t.head.transmission, value: d.transmissionType ? tt(d.transmissionType.title, undefined, lang) : "—" },
+      { label: t.head.guaranty, value: d.guarantyType ? tt(d.guarantyType.title, undefined, lang) : "—" },
+      { label: t.head.color, value: d.colorType ? tt(d.colorType.title, undefined, lang) : "—" },
+      { label: t.head.engineCheck, value: d.engineCheck || "—" },
+      { label: t.head.transmissionCheck, value: d.trnsCheck || "—" },
     );
-    if (d.boardStateType) headRows.push({ label: "Board state", value: tt(d.boardStateType.title) });
-    if (d.mileageStateType) headRows.push({ label: "Mileage state", value: tt(d.mileageStateType.title) });
-    if (d.carStateType) headRows.push({ label: "Car state", value: tt(d.carStateType.title) });
+    if (d.boardStateType) headRows.push({ label: t.head.boardState, value: tt(d.boardStateType.title, undefined, lang) });
+    if (d.mileageStateType) headRows.push({ label: t.head.mileageState, value: tt(d.mileageStateType.title, undefined, lang) });
+    if (d.carStateType) headRows.push({ label: t.head.carState, value: tt(d.carStateType.title, undefined, lang) });
   }
 
   const flags: { label: string; on: boolean }[] = [
-    { label: "Inspector-flagged accident", on: m.accdient },
-    { label: "Simple repair flagged", on: m.simpleRepair },
+    { label: t.flags.accident, on: m.accdient },
+    { label: t.flags.simpleRepair, on: m.simpleRepair },
   ];
   if (d) {
     flags.push(
-      { label: "Tuning", on: d.tuning },
-      { label: "Water log", on: d.waterlog },
-      { label: "Recall", on: d.recall },
+      { label: t.flags.tuning, on: d.tuning },
+      { label: t.flags.waterLog, on: d.waterlog },
+      { label: t.flags.recall, on: d.recall },
     );
   }
 
@@ -154,7 +160,7 @@ export function InspectionReportModal({
         onClick={() => setOpen(true)}
         className="text-sm px-3 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
       >
-        View full inspection report
+        {t.openBtn}
       </button>
       {open && (
         <div
@@ -162,7 +168,7 @@ export function InspectionReportModal({
           onClick={() => setOpen(false)}
           role="dialog"
           aria-modal="true"
-          aria-label="Inspection report"
+          aria-label={t.title}
         >
           <div
             className="bg-white dark:bg-neutral-950 rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl"
@@ -170,15 +176,15 @@ export function InspectionReportModal({
           >
             <div className="flex items-start justify-between mb-5 gap-3 pb-3 border-b border-neutral-200 dark:border-neutral-800">
               <div>
-                <h2 className="text-lg font-bold">Inspection report</h2>
+                <h2 className="text-lg font-bold">{t.title}</h2>
                 <p className="text-xs text-neutral-500 mt-0.5">
-                  Dealer-declared inspection. Translated where dictionary entries exist.
+                  {t.subtitle}
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
-                aria-label="Close"
+                aria-label={t.closeAria}
                 className="text-neutral-500 hover:text-neutral-800 dark:hover:text-neutral-200 text-lg leading-none"
               >
                 ✕
@@ -186,7 +192,7 @@ export function InspectionReportModal({
             </div>
 
             <div className="mb-5">
-              <h3 className="text-sm font-semibold mb-2">Header</h3>
+              <h3 className="text-sm font-semibold mb-2">{t.sections.header}</h3>
               <dl className="grid sm:grid-cols-2 gap-x-6 gap-y-1.5 text-sm">
                 {headRows.map((r) => (
                   <div key={r.label} className="flex justify-between gap-3 border-b border-neutral-100 dark:border-neutral-900 py-1">
@@ -198,7 +204,7 @@ export function InspectionReportModal({
             </div>
 
             <div className="mb-5">
-              <h3 className="text-sm font-semibold mb-2">Status flags</h3>
+              <h3 className="text-sm font-semibold mb-2">{t.sections.statusFlags}</h3>
               <div className="grid sm:grid-cols-2 gap-2 text-sm">
                 {flags.map((f) => (
                   <div
@@ -210,7 +216,7 @@ export function InspectionReportModal({
                     }`}
                   >
                     <span>{f.label}</span>
-                    <span className="font-mono text-xs">{f.on ? "YES" : "no"}</span>
+                    <span className="font-mono text-xs">{f.on ? t.flags.yes : t.flags.no}</span>
                   </div>
                 ))}
               </div>
@@ -218,22 +224,22 @@ export function InspectionReportModal({
 
             {d && (d.tuningStateTypes.length > 0 || d.seriousTypes.length > 0 || d.usageChangeTypes.length > 0 || d.paintPartTypes.length > 0 || d.recallFullFillTypes.length > 0) && (
               <div className="mb-5">
-                <h3 className="text-sm font-semibold mb-2">Notes</h3>
+                <h3 className="text-sm font-semibold mb-2">{t.sections.notes}</h3>
                 <dl className="text-sm grid gap-1.5">
                   {d.tuningStateTypes.length > 0 && (
-                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">Tuning</dt><dd className="text-right">{joinTitles(d.tuningStateTypes)}</dd></div>
+                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">{t.notes.tuning}</dt><dd className="text-right">{joinTitles(d.tuningStateTypes, lang)}</dd></div>
                   )}
                   {d.seriousTypes.length > 0 && (
-                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">Serious</dt><dd className="text-right">{joinTitles(d.seriousTypes)}</dd></div>
+                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">{t.notes.serious}</dt><dd className="text-right">{joinTitles(d.seriousTypes, lang)}</dd></div>
                   )}
                   {d.usageChangeTypes.length > 0 && (
-                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">Usage change</dt><dd className="text-right">{joinTitles(d.usageChangeTypes)}</dd></div>
+                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">{t.notes.usageChange}</dt><dd className="text-right">{joinTitles(d.usageChangeTypes, lang)}</dd></div>
                   )}
                   {d.paintPartTypes.length > 0 && (
-                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">Paint parts</dt><dd className="text-right">{joinTitles(d.paintPartTypes)}</dd></div>
+                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">{t.notes.paintParts}</dt><dd className="text-right">{joinTitles(d.paintPartTypes, lang)}</dd></div>
                   )}
                   {d.recallFullFillTypes.length > 0 && (
-                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">Recall</dt><dd className="text-right">{joinTitles(d.recallFullFillTypes)}</dd></div>
+                    <div className="flex justify-between gap-3"><dt className="text-neutral-500">{t.notes.recall}</dt><dd className="text-right">{joinTitles(d.recallFullFillTypes, lang)}</dd></div>
                   )}
                 </dl>
               </div>
@@ -241,28 +247,28 @@ export function InspectionReportModal({
 
             {inspection.outers.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold mb-2">Exterior panels</h3>
-                {inspection.outers.map((s, i) => <Section key={i} section={s} />)}
+                <h3 className="text-sm font-semibold mb-2">{t.sections.outers}</h3>
+                {inspection.outers.map((s, i) => <Section key={i} section={s} lang={lang} />)}
               </div>
             )}
 
             {inspection.inners.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold mb-2">Mechanical / inner</h3>
-                {inspection.inners.map((s, i) => <Section key={i} section={s} />)}
+                <h3 className="text-sm font-semibold mb-2">{t.sections.inners}</h3>
+                {inspection.inners.map((s, i) => <Section key={i} section={s} lang={lang} />)}
               </div>
             )}
 
             {inspection.etcs.length > 0 && (
               <div>
-                <h3 className="text-sm font-semibold mb-2">Other items</h3>
-                {inspection.etcs.map((s, i) => <Section key={i} section={s} />)}
+                <h3 className="text-sm font-semibold mb-2">{t.sections.etcs}</h3>
+                {inspection.etcs.map((s, i) => <Section key={i} section={s} lang={lang} />)}
               </div>
             )}
 
             {d?.comments && (
               <div className="mb-5">
-                <h3 className="text-sm font-semibold mb-2">Inspector notes (Korean)</h3>
+                <h3 className="text-sm font-semibold mb-2">{t.sections.commentsKo}</h3>
                 <pre className="whitespace-pre-wrap p-3 bg-neutral-50 dark:bg-neutral-900 rounded text-xs">
                   {d.comments}
                 </pre>
@@ -276,14 +282,14 @@ export function InspectionReportModal({
                 rel="noopener noreferrer"
                 className="text-sm text-blue-600 hover:underline"
               >
-                View on Encar →
+                {t.viewOnEncar}
               </a>
               <button
                 type="button"
                 onClick={() => setOpen(false)}
                 className="text-sm px-3 py-1.5 rounded border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-50 dark:hover:bg-neutral-900"
               >
-                Close
+                {t.closeBtn}
               </button>
             </div>
           </div>
